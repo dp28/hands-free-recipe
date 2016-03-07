@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+
+  "name": "Hands-free recipes",
+  "description": "This extension enables Chrome to read recipes to you when asked",
+  "version": "1.0",
+
+  "browser_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html",
+    "default_title": "Start listening"
+  },
+  "permissions": [
+    "tts"
+  ]
+}
