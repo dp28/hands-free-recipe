@@ -118,12 +118,17 @@
 	  value: true
 	});
 	exports.reduce = reduce;
+	exports.forEach = forEach;
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function reduce(initial, array) {
 	  var fullArray = [initial].concat(_toConsumableArray(array));
 	  return Array.prototype.reduce.bind(fullArray);
+	}
+
+	function forEach(arrayLike) {
+	  return Array.prototype.forEach.bind(arrayLike);
 	}
 
 /***/ }

@@ -42,25 +42,47 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	var _functional = __webpack_require__(2);
 
 	function say(text) {
 	  console.log('Saying', text);
 	  chrome.runtime.sendMessage({ say: text });
 	}
 
-	function forEachNode(nodes) {
-	  return Array.prototype.forEach.bind(nodes);
-	}
-
 	var nodes = document.querySelector('ol').querySelectorAll('li');
 
 	console.log('Reading', nodes.length, 'nodes');
-	forEachNode(nodes)(function (node) {
+	(0, _functional.forEach)(nodes)(function (node) {
 	  return say(node.textContent);
 	});
+
+/***/ },
+/* 1 */,
+/* 2 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.reduce = reduce;
+	exports.forEach = forEach;
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	function reduce(initial, array) {
+	  var fullArray = [initial].concat(_toConsumableArray(array));
+	  return Array.prototype.reduce.bind(fullArray);
+	}
+
+	function forEach(arrayLike) {
+	  return Array.prototype.forEach.bind(arrayLike);
+	}
 
 /***/ }
 /******/ ]);
