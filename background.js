@@ -3,7 +3,9 @@
 console.log('Starting background script')
 
 function say(text) {
-  chrome.tts.speak(text, { lang: 'en-GB', enqueue: true })
+  text.split(/[\.,;]/).forEach(textChunk => {
+    chrome.tts.speak(textChunk, { lang: 'en-GB', enqueue: true })
+  })
 }
 
 chrome.runtime.onMessage.addListener(function(request) {

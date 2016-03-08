@@ -14,4 +14,3 @@ var nodes = document.querySelector('ol').querySelectorAll('li')
 console.log('Reading', nodes.length, 'nodes')
 forEachNode(nodes)(node => say(node.textContent))
 
-
