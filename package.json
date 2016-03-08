@@ -4,7 +4,7 @@
   "description": "A chrome extension to read recipes out loud",
   "main": "background.js",
   "scripts": {
-    "build": "gulp"
+    "build": "webpack --progress --colors --watch"
   },
   "author": "Daniel Patterson <dan24patt@gmail.com>",
   "license": "MIT",
