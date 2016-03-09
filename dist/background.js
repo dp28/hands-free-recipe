@@ -61,7 +61,7 @@
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	'use strict';
 
@@ -69,9 +69,6 @@
 	  value: true
 	});
 	exports.default = say;
-
-	var _functional = __webpack_require__(2);
-
 	// Chrome only seems able to say a small number of words for a single call to
 	// the speech API. Over the limit, it cuts out and will not work until
 	//
@@ -94,9 +91,9 @@
 
 	function asChunksSmallEnoughForChrome(text) {
 	  if (!tooLongForChrome(text)) return [text];
-	  return (0, _functional.reduce)([], text.split(' '))(function (sentences, word) {
+	  return text.split(' ').reduce(function (sentences, word) {
 	    return sentences.concat(chromeSizedSentences(sentences.pop() || '', word));
-	  });
+	  }, []);
 	}
 
 	function chromeSizedSentences(sentence, word) {
@@ -106,29 +103,6 @@
 
 	function tooLongForChrome(text) {
 	  return text.length > MAX_SPEECH_LENGTH_IN_CHARACTERS;
-	}
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.reduce = reduce;
-	exports.forEach = forEach;
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	function reduce(initial, array) {
-	  var fullArray = [initial].concat(_toConsumableArray(array));
-	  return Array.prototype.reduce.bind(fullArray);
-	}
-
-	function forEach(arrayLike) {
-	  return Array.prototype.forEach.bind(arrayLike);
 	}
 
 /***/ }

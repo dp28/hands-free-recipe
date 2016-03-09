@@ -1,5 +1,3 @@
-import { reduce } from '../utils/functional'
-
 // Chrome only seems able to say a small number of words for a single call to
 // the speech API. Over the limit, it cuts out and will not work until
 //
@@ -23,9 +21,9 @@ function speakableChunks(text) {
 function asChunksSmallEnoughForChrome(text) {
   if (!tooLongForChrome(text))
     return [text]
-  return reduce([], text.split(' '))((sentences, word) => {
+  return text.split(' ').reduce((sentences, word) => {
     return sentences.concat(chromeSizedSentences(sentences.pop() || '', word))
-  })
+  }, [])
 }
 
 function chromeSizedSentences(sentence, word) {

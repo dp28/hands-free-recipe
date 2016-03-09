@@ -46,19 +46,15 @@
 
 	'use strict';
 
-	var _functional = __webpack_require__(2);
+	var _extraction = __webpack_require__(3);
 
 	function say(text) {
 	  console.log('Saying', text);
 	  chrome.runtime.sendMessage({ say: text });
 	}
 
-	var nodes = document.querySelector('ol').querySelectorAll('li');
-
-	console.log('Reading', nodes.length, 'nodes');
-	(0, _functional.forEach)(nodes)(function (node) {
-	  return say(node.textContent);
-	});
+	console.log('loaded');
+	console.log((0, _extraction.findMethod)());
 
 /***/ },
 /* 1 */,
@@ -70,18 +66,81 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.reduce = reduce;
 	exports.forEach = forEach;
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	function reduce(initial, array) {
-	  var fullArray = [initial].concat(_toConsumableArray(array));
-	  return Array.prototype.reduce.bind(fullArray);
-	}
-
+	exports.concat = concat;
+	exports.contains = contains;
+	exports.match = match;
 	function forEach(arrayLike) {
 	  return Array.prototype.forEach.bind(arrayLike);
+	}
+
+	function concat(first, second) {
+	  return first.concat(second);
+	}
+
+	function contains(substring) {
+	  return function (string) {
+	    return string.includes(substring);
+	  };
+	}
+
+	function match(regex) {
+	  return function (string) {
+	    return string.match(regex);
+	  };
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.findMethod = findMethod;
+
+	var _dom = __webpack_require__(4);
+
+	var _functional = __webpack_require__(2);
+
+	function findMethod() {
+	  var methodList = lists().find(isMethod);
+	  if (methodList) return (0, _dom.findArrayOf)(methodList)('li').map(function (item) {
+	    return item.textContent;
+	  });else return null;
+	}
+
+	function lists() {
+	  return ['ol', 'ul'].map((0, _dom.findArrayOf)(document)).reduce(_functional.concat);
+	}
+
+	function isMethod(list) {
+	  var includesMethod = (0, _functional.match)(/method/i);
+	  var className = list.getAttribute('class');
+	  return includesMethod(list.id) || className && includesMethod(className);
+	}
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.findArrayOf = findArrayOf;
+	exports.asArray = asArray;
+	function findArrayOf(element) {
+	  return function (selector) {
+	    return asArray(element.querySelectorAll(selector));
+	  };
+	}
+
+	function asArray(arrayLike) {
+	  return Array.prototype.slice.call(arrayLike);
 	}
 
 /***/ }
