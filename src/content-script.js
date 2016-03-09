@@ -1,6 +1,6 @@
 'use strict';
 
-import { findMethod } from './recipes/extraction'
+import { extractRecipe } from './recipes/extraction'
 
 function say(text) {
   console.log('Saying', text)
@@ -8,5 +8,5 @@ function say(text) {
 }
 
 console.log('loaded')
-console.log(findMethod())
+console.log(extractRecipe())
 

@@ -1,10 +1,17 @@
-import { findArrayOf, asArray } from '../utils/dom.js'
-import { concat, match } from '../utils/functional.js'
+import { findArrayOf, asArray } from '../utils/dom'
+import { concat, match } from '../utils/functional'
+import { buildRecipe } from './recipe'
 
-export function findMethod() {
-  let methodList = lists().find(isMethod)
-  if (methodList)
-    return findArrayOf(methodList)('li').map(item => item.textContent)
+export function extractRecipe() {
+  let ingredients = findListBy(isSemantically('ingredients'))
+  let method = findListBy(isSemantically('method'))
+  return (ingredients && method) ? buildRecipe(ingredients, method) : null
+}
+
+function findListBy(isCorrectType) {
+  let list = lists().find(isCorrectType)
+  if (list)
+    return findArrayOf(list)('li').map(item => item.textContent)
   else
     return null
 }
@@ -13,9 +20,11 @@ function lists() {
   return ['ol', 'ul'].map(findArrayOf(document)).reduce(concat)
 }
 
-function isMethod(list) {
-  let includesMethod = match(/method/i)
-  let className = list.getAttribute('class')
-  return includesMethod(list.id) || (className && includesMethod(className))
+function isSemantically(typeName) {
+  let includesType = match(new RegExp(typeName, 'i'))
+  return list => {
+    let className = list.getAttribute('class')
+    return includesType(list.id) || (className && includesType(className))
+  }
 }
 

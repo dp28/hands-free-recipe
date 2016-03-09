@@ -46,7 +46,7 @@
 
 	'use strict';
 
-	var _extraction = __webpack_require__(3);
+	var _extraction = __webpack_require__(2);
 
 	function say(text) {
 	  console.log('Saying', text);
@@ -54,11 +54,74 @@
 	}
 
 	console.log('loaded');
-	console.log((0, _extraction.findMethod)());
+	console.log((0, _extraction.extractRecipe)());
 
 /***/ },
 /* 1 */,
 /* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.extractRecipe = extractRecipe;
+
+	var _dom = __webpack_require__(3);
+
+	var _functional = __webpack_require__(4);
+
+	var _recipe = __webpack_require__(5);
+
+	function extractRecipe() {
+	  var ingredients = findListBy(isSemantically('ingredients'));
+	  var method = findListBy(isSemantically('method'));
+	  return ingredients && method ? (0, _recipe.buildRecipe)(ingredients, method) : null;
+	}
+
+	function findListBy(isCorrectType) {
+	  var list = lists().find(isCorrectType);
+	  if (list) return (0, _dom.findArrayOf)(list)('li').map(function (item) {
+	    return item.textContent;
+	  });else return null;
+	}
+
+	function lists() {
+	  return ['ol', 'ul'].map((0, _dom.findArrayOf)(document)).reduce(_functional.concat);
+	}
+
+	function isSemantically(typeName) {
+	  var includesType = (0, _functional.match)(new RegExp(typeName, 'i'));
+	  return function (list) {
+	    var className = list.getAttribute('class');
+	    return includesType(list.id) || className && includesType(className);
+	  };
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.findArrayOf = findArrayOf;
+	exports.asArray = asArray;
+	function findArrayOf(element) {
+	  return function (selector) {
+	    return asArray(element.querySelectorAll(selector));
+	  };
+	}
+
+	function asArray(arrayLike) {
+	  return Array.prototype.slice.call(arrayLike);
+	}
+
+/***/ },
+/* 4 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -91,39 +154,7 @@
 	}
 
 /***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.findMethod = findMethod;
-
-	var _dom = __webpack_require__(4);
-
-	var _functional = __webpack_require__(2);
-
-	function findMethod() {
-	  var methodList = lists().find(isMethod);
-	  if (methodList) return (0, _dom.findArrayOf)(methodList)('li').map(function (item) {
-	    return item.textContent;
-	  });else return null;
-	}
-
-	function lists() {
-	  return ['ol', 'ul'].map((0, _dom.findArrayOf)(document)).reduce(_functional.concat);
-	}
-
-	function isMethod(list) {
-	  var includesMethod = (0, _functional.match)(/method/i);
-	  var className = list.getAttribute('class');
-	  return includesMethod(list.id) || className && includesMethod(className);
-	}
-
-/***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -131,16 +162,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.findArrayOf = findArrayOf;
-	exports.asArray = asArray;
-	function findArrayOf(element) {
-	  return function (selector) {
-	    return asArray(element.querySelectorAll(selector));
+	exports.buildRecipe = buildRecipe;
+	function buildRecipe(ingredients, methods) {
+	  return {
+	    ingredients: ingredients,
+	    methods: methods
 	  };
-	}
-
-	function asArray(arrayLike) {
-	  return Array.prototype.slice.call(arrayLike);
 	}
 
 /***/ }
