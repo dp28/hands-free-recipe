@@ -1,30 +1,29 @@
-import { findArrayOf, asArray } from '../utils/dom'
+import { findArrayOf, findArrayByXPath } from '../utils/dom'
 import { concat, match } from '../utils/functional'
 import { buildRecipe } from './recipe'
 
 export function extractRecipe() {
-  let ingredients = findListBy(isSemantically('ingredients'))
-  let method = findListBy(isSemantically('method'))
+  let ingredients = findListItemsWithin('ingredients', document.body)
+  let method = findListItemsWithin('method', document.body)
   return (ingredients && method) ? buildRecipe(ingredients, method) : null
 }
 
-function findListBy(isCorrectType) {
-  let list = lists().find(isCorrectType)
-  if (list)
-    return findArrayOf(list)('li').map(item => item.textContent)
-  else
-    return null
+function findListItemsWithin(typeName, element) {
+  let listsIn = findListsWhere(isSemantically(typeName))
+  return findArrayByXPath('./li')(listsIn(element)[0]).map(textWithoutTooltips)
 }
 
-function lists() {
-  return ['ol', 'ul'].map(findArrayOf(document)).reduce(concat)
+function findListsWhere(subXPath) {
+  let listXPath = ".//*[local-name()='ol' or local-name()='ul']"
+  return findArrayByXPath(listXPath + subXPath)
 }
 
 function isSemantically(typeName) {
-  let includesType = match(new RegExp(typeName, 'i'))
-  return list => {
-    let className = list.getAttribute('class')
-    return includesType(list.id) || (className && includesType(className))
-  }
+  return `[contains(@id, '${typeName}') or contains(@class, '${typeName}')]`
 }
 
+function textWithoutTooltips(node) {
+  let removeToolTipText = (text, tip) => text.replace(tip.textContent, '')
+  let tooltips = findArrayByXPath('.//*[contains(@role, "tooltip")]')(node)
+  return tooltips.reduce(removeToolTipText, node.textContent)
+}

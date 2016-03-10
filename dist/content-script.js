@@ -75,28 +75,31 @@
 	var _recipe = __webpack_require__(5);
 
 	function extractRecipe() {
-	  var ingredients = findListBy(isSemantically('ingredients'));
-	  var method = findListBy(isSemantically('method'));
+	  var ingredients = findListItemsWithin('ingredients', document.body);
+	  var method = findListItemsWithin('method', document.body);
 	  return ingredients && method ? (0, _recipe.buildRecipe)(ingredients, method) : null;
 	}
 
-	function findListBy(isCorrectType) {
-	  var list = lists().find(isCorrectType);
-	  if (list) return (0, _dom.findArrayOf)(list)('li').map(function (item) {
-	    return item.textContent;
-	  });else return null;
+	function findListItemsWithin(typeName, element) {
+	  var listsIn = findListsWhere(isSemantically(typeName));
+	  return (0, _dom.findArrayByXPath)('./li')(listsIn(element)[0]).map(textWithoutTooltips);
 	}
 
-	function lists() {
-	  return ['ol', 'ul'].map((0, _dom.findArrayOf)(document)).reduce(_functional.concat);
+	function findListsWhere(subXPath) {
+	  var listXPath = ".//*[local-name()='ol' or local-name()='ul']";
+	  return (0, _dom.findArrayByXPath)(listXPath + subXPath);
 	}
 
 	function isSemantically(typeName) {
-	  var includesType = (0, _functional.match)(new RegExp(typeName, 'i'));
-	  return function (list) {
-	    var className = list.getAttribute('class');
-	    return includesType(list.id) || className && includesType(className);
+	  return '[contains(@id, \'' + typeName + '\') or contains(@class, \'' + typeName + '\')]';
+	}
+
+	function textWithoutTooltips(node) {
+	  var removeToolTipText = function removeToolTipText(text, tip) {
+	    return text.replace(tip.textContent, '');
 	  };
+	  var tooltips = (0, _dom.findArrayByXPath)('.//*[contains(@role, "tooltip")]')(node);
+	  return tooltips.reduce(removeToolTipText, node.textContent);
 	}
 
 /***/ },
@@ -109,6 +112,7 @@
 	  value: true
 	});
 	exports.findArrayOf = findArrayOf;
+	exports.findArrayByXPath = findArrayByXPath;
 	exports.asArray = asArray;
 	function findArrayOf(element) {
 	  return function (selector) {
@@ -116,8 +120,28 @@
 	  };
 	}
 
+	function findArrayByXPath(xPath) {
+	  return function (element) {
+	    return iteratorToArray(findByXPath(element, xPath));
+	  };
+	}
+
 	function asArray(arrayLike) {
 	  return Array.prototype.slice.call(arrayLike);
+	}
+
+	function findByXPath(element, xPath) {
+	  return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);
+	}
+
+	function iteratorToArray(iterator) {
+	  var array = [];
+	  var next = iterator.iterateNext();
+	  while (next) {
+	    array.push(next);
+	    next = iterator.iterateNext();
+	  }
+	  return array;
 	}
 
 /***/ },
