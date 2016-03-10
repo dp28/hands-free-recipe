@@ -5,7 +5,7 @@ import { buildRecipe } from './recipe'
 export function extractRecipe() {
   let ingredients = findListItemsWithin('ingredients', document.body)
   let method = findListItemsWithin('method', document.body)
-  return (ingredients && method) ? buildRecipe(ingredients, method) : null
+  return buildRecipe(ingredients, method)
 }
 
 function findListItemsWithin(typeName, element) {

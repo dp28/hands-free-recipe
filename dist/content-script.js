@@ -77,7 +77,7 @@
 	function extractRecipe() {
 	  var ingredients = findListItemsWithin('ingredients', document.body);
 	  var method = findListItemsWithin('method', document.body);
-	  return ingredients && method ? (0, _recipe.buildRecipe)(ingredients, method) : null;
+	  return (0, _recipe.buildRecipe)(ingredients, method);
 	}
 
 	function findListItemsWithin(typeName, element) {
@@ -131,12 +131,12 @@
 	}
 
 	function findByXPath(element, xPath) {
-	  return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);
+	  if (element) return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);else return element;
 	}
 
 	function iteratorToArray(iterator) {
 	  var array = [];
-	  var next = iterator.iterateNext();
+	  var next = iterator ? iterator.iterateNext() : iterator;
 	  while (next) {
 	    array.push(next);
 	    next = iterator.iterateNext();
@@ -188,6 +188,19 @@
 	});
 	exports.buildRecipe = buildRecipe;
 	function buildRecipe(ingredients, methods) {
+	  if (canBuildRecipe(ingredients, methods)) return buildRecipeFromParts(ingredients, methods);
+	  return null;
+	}
+
+	function canBuildRecipe(ingredients, method) {
+	  return nonEmpty(ingredients) && nonEmpty(method);
+	}
+
+	function nonEmpty(list) {
+	  return list && list.length;
+	}
+
+	function buildRecipeFromParts(ingredients, methods) {
 	  return {
 	    ingredients: ingredients,
 	    methods: methods

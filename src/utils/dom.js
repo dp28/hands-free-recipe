@@ -11,12 +11,15 @@ export function asArray(arrayLike) {
 }
 
 function findByXPath(element, xPath) {
-  return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null)
+  if (element)
+    return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null)
+  else
+    return element
 }
 
 function iteratorToArray(iterator) {
   let array = []
-  let next = iterator.iterateNext()
+  let next = iterator ? iterator.iterateNext() : iterator
   while (next) {
     array.push(next)
     next = iterator.iterateNext()
