@@ -48,13 +48,23 @@
 
 	var _extraction = __webpack_require__(2);
 
+	var _dom = __webpack_require__(3);
+
 	function say(text) {
 	  console.log('Saying', text);
 	  chrome.runtime.sendMessage({ say: text });
 	}
 
 	console.log('loaded');
-	console.log((0, _extraction.extractRecipe)());
+	var recipe = (0, _extraction.extractRecipe)();
+
+	if (recipe) {
+	  console.log(recipe);
+	  var methodXPath = ".//ol/*[contains(@class, 'method')]";
+	  var node = (0, _dom.findByXPath)(document.body, methodXPath).iterateNext();
+	  console.log(node);
+	  (0, _dom.forceFullScreen)(node);
+	}
 
 /***/ },
 /* 1 */,
@@ -106,7 +116,7 @@
 /* 3 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -114,6 +124,8 @@
 	exports.findArrayOf = findArrayOf;
 	exports.findArrayByXPath = findArrayByXPath;
 	exports.asArray = asArray;
+	exports.forceFullScreen = forceFullScreen;
+	exports.findByXPath = findByXPath;
 	function findArrayOf(element) {
 	  return function (selector) {
 	    return asArray(element.querySelectorAll(selector));
@@ -128,6 +140,10 @@
 
 	function asArray(arrayLike) {
 	  return Array.prototype.slice.call(arrayLike);
+	}
+
+	function forceFullScreen(element) {
+	  element.setAttribute('class', 'force-full-screen');
 	}
 
 	function findByXPath(element, xPath) {
