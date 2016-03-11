@@ -1,7 +1,7 @@
 'use strict';
 
 import { extractRecipe } from './recipes/extraction'
-import { findByXPath, forceFullScreen } from './utils/dom'
+import { findByXPath, renderTemplate } from './utils/dom'
 import { MessageTypes } from './messaging/message-types'
 import { broadcast } from './messaging/messaging'
 
@@ -19,6 +19,6 @@ if (recipe) {
   broadcast(MessageTypes.RECIPE_FOUND, recipe)
 
   let node = findByXPath(document.body, methodXPath).iterateNext()
-  forceFullScreen(node)
+  document.body.innerHTML = renderTemplate('recipe', { recipe })
 }
 

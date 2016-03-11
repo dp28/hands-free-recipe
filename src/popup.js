@@ -2,16 +2,16 @@
 
 import { handleMessages } from './messaging/messaging'
 import { MessageTypes } from './messaging/message-types'
-import popupTemplate from 'jade!./templates/popup.jade'
+import { renderTemplate } from './utils/dom'
 
 (() => {
 
-  function renderStatus(statusText) {
-    document.getElementById('status').textContent = statusText;
+  function replaceHtml(context) {
+    document.body.innerHTML = renderTemplate('popup', context)
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.body.innerHTML = popupTemplate({ title: 'Hello, world!' })
+    replaceHtml({ title: 'Hello, world!' })
   })
 
   let recipe = null
@@ -19,7 +19,7 @@ import popupTemplate from 'jade!./templates/popup.jade'
   handleMessages({
     [MessageTypes.RECIPE_FOUND]: function(newRecipe) {
       recipe = newRecipe
-      document.getElementById('recipe').innerHTML = recipe
+      replaceHtml({ title: 'Recipe found' })
     }
   })
 

@@ -51,31 +51,76 @@
 
 	var _messageTypes = __webpack_require__(12);
 
-	var _popup = __webpack_require__(52);
-
-	var _popup2 = _interopRequireDefault(_popup);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _dom = __webpack_require__(3);
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	(function () {
 
-	  function renderStatus(statusText) {
-	    document.getElementById('status').textContent = statusText;
+	  function replaceHtml(context) {
+	    document.body.innerHTML = (0, _dom.renderTemplate)('popup', context);
 	  }
 
 	  document.addEventListener('DOMContentLoaded', function () {
-	    document.body.innerHTML = (0, _popup2.default)({ title: 'Hello, world!' });
+	    replaceHtml({ title: 'Hello, world!' });
 	  });
 
 	  var recipe = null;
 
 	  (0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.RECIPE_FOUND, function (newRecipe) {
 	    recipe = newRecipe;
-	    document.getElementById('recipe').innerHTML = recipe;
+	    replaceHtml({ title: 'Recipe found' });
 	  }));
 	})();
+
+/***/ },
+
+/***/ 3:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.renderTemplate = renderTemplate;
+	exports.findArrayOf = findArrayOf;
+	exports.findArrayByXPath = findArrayByXPath;
+	exports.asArray = asArray;
+	exports.findByXPath = findByXPath;
+	function renderTemplate(name, context) {
+	  return __webpack_require__(53)("./" + name + ".jade")(context);
+	}
+
+	function findArrayOf(element) {
+	  return function (selector) {
+	    return asArray(element.querySelectorAll(selector));
+	  };
+	}
+
+	function findArrayByXPath(xPath) {
+	  return function (element) {
+	    return iteratorToArray(findByXPath(element, xPath));
+	  };
+	}
+
+	function asArray(arrayLike) {
+	  return Array.prototype.slice.call(arrayLike);
+	}
+
+	function findByXPath(element, xPath) {
+	  if (element) return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);else return element;
+	}
+
+	function iteratorToArray(iterator) {
+	  var array = [];
+	  var next = iterator ? iterator.iterateNext() : iterator;
+	  while (next) {
+	    array.push(next);
+	    next = iterator.iterateNext();
+	  }
+	  return array;
+	}
 
 /***/ },
 
@@ -395,7 +440,91 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><div id=\"recipe\"></div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	}
+
+/***/ },
+
+/***/ 53:
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./popup.jade": 52,
+		"./recipe.jade": 54
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 53;
+
+
+/***/ },
+
+/***/ 54:
+/***/ function(module, exports, __webpack_require__) {
+
+	var jade = __webpack_require__(44);
+
+	module.exports = function template(locals) {
+	var buf = [];
+	var jade_mixins = {};
+	var jade_interp;
+	;var locals_for_with = (locals || {});(function (recipe, undefined) {
+	buf.push("<div id=\"recipe\" class=\"full-size\"><ul id=\"ingredients\">");
+	// iterate recipe.ingredients
+	;(function(){
+	  var $$obj = recipe.ingredients;
+	  if ('number' == typeof $$obj.length) {
+
+	    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+	      var ingredient = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = ingredient) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  } else {
+	    var $$l = 0;
+	    for (var $index in $$obj) {
+	      $$l++;      var ingredient = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = ingredient) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  }
+	}).call(this);
+
+	buf.push("</ul><ol id=\"methods\">");
+	// iterate recipe.methods
+	;(function(){
+	  var $$obj = recipe.methods;
+	  if ('number' == typeof $$obj.length) {
+
+	    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+	      var method = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = method) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  } else {
+	    var $$l = 0;
+	    for (var $index in $$obj) {
+	      $$l++;      var method = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = method) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  }
+	}).call(this);
+
+	buf.push("</ol></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ }

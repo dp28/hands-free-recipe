@@ -1,3 +1,7 @@
+export function renderTemplate(name, context) {
+  return require(`jade!../templates/${name}.jade`)(context)
+}
+
 export function findArrayOf(element) {
   return selector => asArray(element.querySelectorAll(selector))
 }
