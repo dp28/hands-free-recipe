@@ -50,14 +50,17 @@
 
 	var _say2 = _interopRequireDefault(_say);
 
+	var _messaging = __webpack_require__(11);
+
+	var _messageTypes = __webpack_require__(12);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	console.log('Starting background script');
 
-	chrome.runtime.onMessage.addListener(function (request) {
-	  console.log(request);
-	  if (request.say) (0, _say2.default)(request.say);
-	});
+	(0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.SAY, _say2.default));
 
 /***/ },
 /* 1 */
@@ -104,6 +107,56 @@
 	function tooLongForChrome(text) {
 	  return text.length > MAX_SPEECH_LENGTH_IN_CHARACTERS;
 	}
+
+/***/ },
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.broadcast = broadcast;
+	exports.handleMessages = handleMessages;
+	function broadcast(messageType, data) {
+	  chrome.runtime.sendMessage({ messageType: messageType, data: data });
+	}
+
+	function handleMessages(handler) {
+	  chrome.runtime.onMessage.addListener(handleMessage(handler));
+	}
+
+	function handleMessage(handler) {
+	  return function (message) {
+	    return console.log('received', message);
+	  };
+	  var handlerFunction = handler[message.messageType];
+	  handlerFunction ? handlerFunction(data) : null;
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var MessageTypes = exports.MessageTypes = {
+	  RECIPE_FOUND: 'recipe_found',
+	  SAY: 'say'
+	};
 
 /***/ }
 /******/ ]);

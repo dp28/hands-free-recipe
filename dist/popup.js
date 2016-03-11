@@ -40,11 +40,14 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ function(module, exports) {
+/******/ ({
+
+/***/ 0:
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
+
+	var _messaging = __webpack_require__(11);
 
 	function renderStatus(statusText) {
 	  document.getElementById('status').textContent = statusText;
@@ -54,5 +57,36 @@
 	  renderStatus('Hello, world!');
 	});
 
+	(0, _messaging.handleMessages)({});
+
+/***/ },
+
+/***/ 11:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.broadcast = broadcast;
+	exports.handleMessages = handleMessages;
+	function broadcast(messageType, data) {
+	  chrome.runtime.sendMessage({ messageType: messageType, data: data });
+	}
+
+	function handleMessages(handler) {
+	  chrome.runtime.onMessage.addListener(handleMessage(handler));
+	}
+
+	function handleMessage(handler) {
+	  return function (message) {
+	    return console.log('received', message);
+	  };
+	  var handlerFunction = handler[message.messageType];
+	  handlerFunction ? handlerFunction(data) : null;
+	}
+
 /***/ }
-/******/ ]);
+
+/******/ });

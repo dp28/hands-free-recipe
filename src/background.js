@@ -1,10 +1,10 @@
 'use strict';
 import say from './speech/say'
+import { handleMessages } from './messaging/messaging'
+import { MessageTypes } from './messaging/message-types'
 
 console.log('Starting background script')
 
-chrome.runtime.onMessage.addListener(request => {
-  console.log(request)
-  if (request.say)
-    say(request.say)
+handleMessages({
+  [MessageTypes.SAY]: say
 })

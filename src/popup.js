@@ -1,5 +1,7 @@
 'use strict';
 
+import { handleMessages } from './messaging/messaging'
+
 function renderStatus(statusText) {
   document.getElementById('status').textContent = statusText;
 }
@@ -7,3 +9,5 @@ function renderStatus(statusText) {
 document.addEventListener('DOMContentLoaded', function() {
   renderStatus('Hello, world!')
 });
+
+handleMessages({})

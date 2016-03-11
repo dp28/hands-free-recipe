@@ -50,9 +50,13 @@
 
 	var _dom = __webpack_require__(3);
 
+	var _messageTypes = __webpack_require__(12);
+
+	var _messaging = __webpack_require__(11);
+
 	function say(text) {
 	  console.log('Saying', text);
-	  chrome.runtime.sendMessage({ say: text });
+	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
 	}
 
 	console.log('loaded');
@@ -61,8 +65,10 @@
 	if (recipe) {
 	  console.log(recipe);
 	  var methodXPath = ".//ol/*[contains(@class, 'method')]";
+
+	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
+
 	  var node = (0, _dom.findByXPath)(document.body, methodXPath).iterateNext();
-	  console.log(node);
 	  (0, _dom.forceFullScreen)(node);
 	}
 
@@ -222,6 +228,52 @@
 	    methods: methods
 	  };
 	}
+
+/***/ },
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.broadcast = broadcast;
+	exports.handleMessages = handleMessages;
+	function broadcast(messageType, data) {
+	  chrome.runtime.sendMessage({ messageType: messageType, data: data });
+	}
+
+	function handleMessages(handler) {
+	  chrome.runtime.onMessage.addListener(handleMessage(handler));
+	}
+
+	function handleMessage(handler) {
+	  return function (message) {
+	    return console.log('received', message);
+	  };
+	  var handlerFunction = handler[message.messageType];
+	  handlerFunction ? handlerFunction(data) : null;
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var MessageTypes = exports.MessageTypes = {
+	  RECIPE_FOUND: 'recipe_found',
+	  SAY: 'say'
+	};
 
 /***/ }
 /******/ ]);
