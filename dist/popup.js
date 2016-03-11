@@ -49,15 +49,27 @@
 
 	var _messaging = __webpack_require__(11);
 
-	function renderStatus(statusText) {
-	  document.getElementById('status').textContent = statusText;
-	}
+	var _messageTypes = __webpack_require__(12);
 
-	document.addEventListener('DOMContentLoaded', function () {
-	  renderStatus('Hello, world!');
-	});
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-	(0, _messaging.handleMessages)({});
+	(function () {
+
+	  function renderStatus(statusText) {
+	    document.getElementById('status').textContent = statusText;
+	  }
+
+	  document.addEventListener('DOMContentLoaded', function () {
+	    renderStatus('Hello, world!');
+	  });
+
+	  var recipe = null;
+
+	  (0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.RECIPE_FOUND, function (newRecipe) {
+	    recipe = newRecipe;
+	    document.getElementById('recipe').innerHTML = recipe;
+	  }));
+	})();
 
 /***/ },
 
@@ -72,20 +84,38 @@
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
 	function broadcast(messageType, data) {
-	  chrome.runtime.sendMessage({ messageType: messageType, data: data });
+	  var message = { messageType: messageType, data: data };
+	  console.log('sending', message);
+	  chrome.runtime.sendMessage(message);
 	}
 
 	function handleMessages(handler) {
+	  console.log('registering', handler);
 	  chrome.runtime.onMessage.addListener(handleMessage(handler));
 	}
 
 	function handleMessage(handler) {
 	  return function (message) {
-	    return console.log('received', message);
+	    console.log('received', message);
+	    var handlerFunction = handler[message.messageType];
+	    handlerFunction ? handlerFunction(message.data) : null;
 	  };
-	  var handlerFunction = handler[message.messageType];
-	  handlerFunction ? handlerFunction(data) : null;
 	}
+
+/***/ },
+
+/***/ 12:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var MessageTypes = exports.MessageTypes = {
+	  RECIPE_FOUND: 'recipe_found',
+	  SAY: 'say'
+	};
 
 /***/ }
 

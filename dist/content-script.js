@@ -63,7 +63,6 @@
 	var recipe = (0, _extraction.extractRecipe)();
 
 	if (recipe) {
-	  console.log(recipe);
 	  var methodXPath = ".//ol/*[contains(@class, 'method')]";
 
 	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
@@ -246,19 +245,22 @@
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
 	function broadcast(messageType, data) {
-	  chrome.runtime.sendMessage({ messageType: messageType, data: data });
+	  var message = { messageType: messageType, data: data };
+	  console.log('sending', message);
+	  chrome.runtime.sendMessage(message);
 	}
 
 	function handleMessages(handler) {
+	  console.log('registering', handler);
 	  chrome.runtime.onMessage.addListener(handleMessage(handler));
 	}
 
 	function handleMessage(handler) {
 	  return function (message) {
-	    return console.log('received', message);
+	    console.log('received', message);
+	    var handlerFunction = handler[message.messageType];
+	    handlerFunction ? handlerFunction(message.data) : null;
 	  };
-	  var handlerFunction = handler[message.messageType];
-	  handlerFunction ? handlerFunction(data) : null;
 	}
 
 /***/ },

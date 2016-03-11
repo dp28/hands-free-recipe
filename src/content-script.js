@@ -14,7 +14,6 @@ console.log('loaded')
 let recipe = extractRecipe()
 
 if (recipe) {
-  console.log(recipe)
   let methodXPath = ".//ol/*[contains(@class, 'method')]"
 
   broadcast(MessageTypes.RECIPE_FOUND, recipe)
