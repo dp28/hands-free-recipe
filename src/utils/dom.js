@@ -10,10 +10,6 @@ export function asArray(arrayLike) {
   return Array.prototype.slice.call(arrayLike)
 }
 
-export function forceFullScreen(element) {
-  element.setAttribute('class', 'force-full-screen')
-}
-
 export function findByXPath(element, xPath) {
   if (element)
     return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null)

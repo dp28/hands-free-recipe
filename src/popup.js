@@ -2,6 +2,7 @@
 
 import { handleMessages } from './messaging/messaging'
 import { MessageTypes } from './messaging/message-types'
+import popupTemplate from 'jade!./templates/popup.jade'
 
 (() => {
 
@@ -10,7 +11,7 @@ import { MessageTypes } from './messaging/message-types'
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    renderStatus('Hello, world!')
+    document.body.innerHTML = popupTemplate({ title: 'Hello, world!' })
   })
 
   let recipe = null

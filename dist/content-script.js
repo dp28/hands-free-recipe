@@ -121,7 +121,7 @@
 /* 3 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -129,7 +129,6 @@
 	exports.findArrayOf = findArrayOf;
 	exports.findArrayByXPath = findArrayByXPath;
 	exports.asArray = asArray;
-	exports.forceFullScreen = forceFullScreen;
 	exports.findByXPath = findByXPath;
 	function findArrayOf(element) {
 	  return function (selector) {
@@ -145,10 +144,6 @@
 
 	function asArray(arrayLike) {
 	  return Array.prototype.slice.call(arrayLike);
-	}
-
-	function forceFullScreen(element) {
-	  element.setAttribute('class', 'force-full-screen');
 	}
 
 	function findByXPath(element, xPath) {

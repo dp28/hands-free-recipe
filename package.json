@@ -18,5 +18,9 @@
     "presets": [
       "es2015"
     ]
+  },
+  "dependencies": {
+    "jade": "^1.11.0",
+    "jade-loader": "^0.8.0"
   }
 }
