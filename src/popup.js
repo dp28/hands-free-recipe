@@ -3,7 +3,7 @@
 import { handleMessages, broadcast } from './messaging/messaging'
 import { MessageTypes } from './messaging/message-types'
 import { renderTemplate } from './dom/rendering'
-import { onClickBroadcast } from './dom/event-handlers'
+import { onClickBroadcast, onClickId } from './dom/event-handlers'
 
 (() => {
 
@@ -12,6 +12,7 @@ import { onClickBroadcast } from './dom/event-handlers'
     onClickBroadcast('next', MessageTypes.NEXT_METHOD)
     onClickBroadcast('focus', MessageTypes.FOCUS_METHOD)
     onClickBroadcast('previous', MessageTypes.PREVIOUS_METHOD)
+    onClickId('start-listening', () =>  chrome.runtime.openOptionsPage())
   }
 
   document.addEventListener('DOMContentLoaded', () => {

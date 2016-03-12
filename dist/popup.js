@@ -63,6 +63,9 @@
 	    (0, _eventHandlers.onClickBroadcast)('next', _messageTypes.MessageTypes.NEXT_METHOD);
 	    (0, _eventHandlers.onClickBroadcast)('focus', _messageTypes.MessageTypes.FOCUS_METHOD);
 	    (0, _eventHandlers.onClickBroadcast)('previous', _messageTypes.MessageTypes.PREVIOUS_METHOD);
+	    (0, _eventHandlers.onClickId)('start-listening', function () {
+	      return chrome.runtime.openOptionsPage();
+	    });
 	  }
 
 	  document.addEventListener('DOMContentLoaded', function () {
@@ -463,7 +466,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><input id=\"focus\" type=\"button\" value=\"focus\"><input id=\"next\" type=\"button\" value=\"next\"><input id=\"previous\" type=\"button\" value=\"previous\"></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><input id=\"focus\" type=\"button\" value=\"focus\"><input id=\"next\" type=\"button\" value=\"next\"><input id=\"previous\" type=\"button\" value=\"previous\"><input id=\"start-listening\" type=\"button\" value=\"start listening\"></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
 	}
 
 /***/ },
