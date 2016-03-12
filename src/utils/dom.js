@@ -1,5 +1,5 @@
 export function renderTemplate(name, context) {
-  return require(`jade!../templates/${name}.jade`)(context)
+  return require(`../templates/${name}.jade`)(context)
 }
 
 export function findArrayOf(element) {
