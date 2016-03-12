@@ -170,8 +170,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (text) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><input id=\"next\" type=\"button\" value=\"next\"><input id=\"previous\" type=\"button\" value=\"previous\"><div id=\"focused-text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
+	;var locals_for_with = (locals || {});(function (index, text) {
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><input id=\"previous\" type=\"button\" value=\"previous\"><input id=\"next\" type=\"button\" value=\"next\"><div id=\"focused-text\"><span class=\"index\">" + (jade.escape((jade_interp = index + '.') == null ? '' : jade_interp)) + "</span><span class=\"text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</span></div></div>");}.call(this,"index" in locals_for_with?locals_for_with.index:typeof index!=="undefined"?index:undefined,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
 	}
 
 /***/ },

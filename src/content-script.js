@@ -33,7 +33,11 @@ if (recipe) {
 
   function focus(methodType) {
     return () => {
-      let context = { text: recipeManager[`${methodType}Method`]() }
+      let context = {
+        text: recipeManager[`${methodType}Method`](),
+        index: recipeManager.currentMethodIndex + 1
+      }
+
       renderOverlay('focused', context)
       onClickId('next', focus('next'))
       onClickId('previous', focus('previous'))

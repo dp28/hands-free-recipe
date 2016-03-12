@@ -2,7 +2,9 @@ extends ./layouts/overlay
 
 block overlay
 
-  input#next(type='button' value='next')
   input#previous(type='button' value='previous')
+  input#next(type='button' value='next')
 
-  #focused-text #{text}
+  #focused-text
+    span.index #{index + '.'}
+    span.text #{text}
