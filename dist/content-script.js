@@ -83,7 +83,7 @@
 	if (recipe) {
 	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
 
-	  render('recipe', { recipe: recipe });
+	  render('recipe', { recipe: recipe, close: close });
 
 	  var commands = new _registry2.default();
 	  var recogniser = new _recognition2.default(commands.getExecutor());
@@ -95,15 +95,19 @@
 	}
 
 	function render(templateName, data) {
-	  findOverlay().innerHTML = (0, _dom.renderTemplate)(templateName, data);
+	  findOverlay(templateName).innerHTML = (0, _dom.renderTemplate)(templateName, data);
 	}
 
-	var OVERLAY_ID = 'recipe-content-overlay';
+	function close(templateName) {
+	  document.getElementById('content-overlay-' + templateName).innerHTML = '';
+	}
 
-	function findOverlay() {
-	  var overlay = document.getElementById(OVERLAY_ID);
+	function findOverlay(templateName) {
+	  var id = 'content-overlay-' + templateName;
+	  var overlay = document.getElementById(id);
 	  if (overlay) return overlay;
 	  overlay = document.createElement('div');
+	  overlay.id = id;
 	  document.body.appendChild(overlay);
 	  return overlay;
 	}
@@ -581,8 +585,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><h2>Ingredients</h2><ul id=\"ingredients\">");
+	;var locals_for_with = (locals || {});(function (close, recipe, undefined) {
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input type=\"button\" value=\"Close\"" + (jade.attr("onClick", '(' + (close) + ')("recipe")', true, true)) + "><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -628,7 +632,7 @@
 	  }
 	}).call(this);
 
-	buf.push("</ol></div></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
+	buf.push("</ol></div></div>");}.call(this,"close" in locals_for_with?locals_for_with.close:typeof close!=="undefined"?close:undefined,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ },

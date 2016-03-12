@@ -501,8 +501,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><h2>Ingredients</h2><ul id=\"ingredients\">");
+	;var locals_for_with = (locals || {});(function (close, recipe, undefined) {
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input type=\"button\" value=\"Close\"" + (jade.attr("onClick", '(' + (close) + ')("recipe")', true, true)) + "><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -548,7 +548,7 @@
 	  }
 	}).call(this);
 
-	buf.push("</ol></div></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
+	buf.push("</ol></div></div>");}.call(this,"close" in locals_for_with?locals_for_with.close:typeof close!=="undefined"?close:undefined,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ }
