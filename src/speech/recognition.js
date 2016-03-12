@@ -1,9 +1,10 @@
-import { logError } from '../utils/logging'
+import { logError, logInfo } from '../utils/logging'
 
 export default class Recogniser {
 
-  constructor() {
+  constructor(resultHandlerCallback) {
     this.recognition = new webkitSpeechRecognition()
+    this.resultHandlerCallback = resultHandlerCallback
     this.recognition.onresult = this.handleResult.bind(this)
     this.recognition.onerror = logError
     this.recognition.lang = 'en-GB'
@@ -16,18 +17,18 @@ export default class Recogniser {
   }
 
   start() {
-    console.log('starting recognition')
+    logInfo('starting recognition')
     this.recognition.start()
   }
 
   restart() {
-    console.log('restarting')
+    logInfo('restarting')
     this.recognition.stop()
     this.start()
   }
 
   handleResult(recognitionEvent) {
-    console.log(this.extractTranscript(recognitionEvent))
+    this.resultHandlerCallback(this.extractTranscript(recognitionEvent))
   }
   extractTranscript(recognitionEvent) {
     let result = recognitionEvent.results[recognitionEvent.resultIndex]

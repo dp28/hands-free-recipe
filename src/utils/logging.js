@@ -5,3 +5,5 @@ export function log(tag) {
 }
 
 export const logError = log('Error:')
+
+export const logInfo = log('Info:')

@@ -54,6 +54,8 @@
 
 	var _messaging = __webpack_require__(2);
 
+	var _logging = __webpack_require__(15);
+
 	var _recognition = __webpack_require__(14);
 
 	var _recognition2 = _interopRequireDefault(_recognition);
@@ -77,7 +79,8 @@
 	  document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
 	}
 
-	new _recognition2.default().start();
+	var recogniser = new _recognition2.default((0, _logging.log)('heard:'));
+	recogniser.start();
 
 /***/ },
 /* 1 */,
@@ -652,10 +655,11 @@
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var Recogniser = function () {
-	  function Recogniser() {
+	  function Recogniser(resultHandlerCallback) {
 	    _classCallCheck(this, Recogniser);
 
 	    this.recognition = new webkitSpeechRecognition();
+	    this.resultHandlerCallback = resultHandlerCallback;
 	    this.recognition.onresult = this.handleResult.bind(this);
 	    this.recognition.onerror = _logging.logError;
 	    this.recognition.lang = 'en-GB';
@@ -671,20 +675,20 @@
 	  }, {
 	    key: 'start',
 	    value: function start() {
-	      console.log('starting recognition');
+	      (0, _logging.logInfo)('starting recognition');
 	      this.recognition.start();
 	    }
 	  }, {
 	    key: 'restart',
 	    value: function restart() {
-	      console.log('restarting');
+	      (0, _logging.logInfo)('restarting');
 	      this.recognition.stop();
 	      this.start();
 	    }
 	  }, {
 	    key: 'handleResult',
 	    value: function handleResult(recognitionEvent) {
-	      console.log(this.extractTranscript(recognitionEvent));
+	      this.resultHandlerCallback(this.extractTranscript(recognitionEvent));
 	    }
 	  }, {
 	    key: 'extractTranscript',
@@ -722,6 +726,8 @@
 	}
 
 	var logError = exports.logError = log('Error:');
+
+	var logInfo = exports.logInfo = log('Info:');
 
 /***/ }
 /******/ ]);
