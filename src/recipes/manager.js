@@ -10,7 +10,6 @@ export default class RecipeManager {
   }
 
   nextMethod() {
-    console.log('next called')
     if (this.currentMethodIndex < this.recipe.methods.length - 1)
       this.currentMethodIndex++
     return this.currentMethod()

@@ -1,8 +1,11 @@
 import { onClickId } from './event-handlers'
 
 export function renderOverlay(templateName, context) {
-  findOverlay(templateName).innerHTML = renderTemplate(templateName, context)
+  context.overlayId = overlayId(templateName)
+  let overlay = findOverlay(templateName)
+  overlay.innerHTML = renderTemplate(templateName, context)
   onClickClose(templateName)
+  return overlay
 }
 
 export function renderTemplate(templateName, context) {
@@ -11,13 +14,16 @@ export function renderTemplate(templateName, context) {
 
 function onClickClose(templateName) {
   onClickId(`close-${templateName}`, () => {
-    let overlay = document.getElementById('content-overlay-' + templateName)
-    overlay.innerHTML = ''
+    document.getElementById(overlayId(templateName)).innerHTML = ''
   })
 }
 
+function overlayId(templateName) {
+  return `content-overlay-${templateName}`
+}
+
 function findOverlay(templateName) {
-  let id = `content-overlay-${templateName}`
+  let id = overlayId(templateName)
   let overlay = document.getElementById(id)
   if (overlay)
     return overlay

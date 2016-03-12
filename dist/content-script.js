@@ -56,6 +56,8 @@
 
 	var _eventHandlers = __webpack_require__(23);
 
+	var _fitToSize = __webpack_require__(24);
+
 	var _messageTypes = __webpack_require__(4);
 
 	var _messaging = __webpack_require__(3);
@@ -94,8 +96,10 @@
 	          text: recipeManager[methodType + 'Method'](),
 	          index: recipeManager.currentMethodIndex + 1
 	        };
+	        var overlay = (0, _rendering.renderOverlay)('focused', context);
+	        var content = overlay.getElementsByClassName('content-overlay')[0];
+	        (0, _fitToSize.scaleFontSizeToFill)(content);
 
-	        (0, _rendering.renderOverlay)('focused', context);
 	        (0, _eventHandlers.onClickId)('next', focus('next'));
 	        (0, _eventHandlers.onClickId)('previous', focus('previous'));
 	      };
@@ -174,6 +178,7 @@
 	  RECIPE_FOUND: 'recipe_found',
 	  NEXT_METHOD: 'next_method',
 	  PREVIOUS_METHOD: 'previous_method',
+	  FOCUS_METHOD: 'focus_method',
 	  SAY: 'say'
 	};
 
@@ -257,8 +262,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (index, text) {
-	buf.push("<div class=\"content-mask\"></div><div class=\"content-overlay\"><input id=\"close-focused\" type=\"button\" value=\"Close\"><input id=\"previous\" type=\"button\" value=\"previous\"><input id=\"next\" type=\"button\" value=\"next\"><div id=\"focused-text\"><span class=\"index\">" + (jade.escape((jade_interp = index + '.') == null ? '' : jade_interp)) + "</span><span class=\"text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</span></div></div>");}.call(this,"index" in locals_for_with?locals_for_with.index:typeof index!=="undefined"?index:undefined,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
+	;var locals_for_with = (locals || {});(function (index, overlayId, text) {
+	buf.push("<div class=\"content-mask\"></div><div" + (jade.attr("id", overlayId, true, true)) + " class=\"content-overlay\"><input id=\"close-focused\" type=\"button\" value=\"Close\"><input id=\"previous\" type=\"button\" value=\"previous\"><input id=\"next\" type=\"button\" value=\"next\"><div id=\"focused-text\"><span class=\"index\">" + (jade.escape((jade_interp = index + '.') == null ? '' : jade_interp)) + "</span><span class=\"text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</span></div></div>");}.call(this,"index" in locals_for_with?locals_for_with.index:typeof index!=="undefined"?index:undefined,"overlayId" in locals_for_with?locals_for_with.overlayId:typeof overlayId!=="undefined"?overlayId:undefined,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -529,8 +534,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-
-	buf.push("<div class=\"content-mask\"></div><div class=\"content-overlay\"></div>");;return buf.join("");
+	;var locals_for_with = (locals || {});(function (overlayId) {
+	buf.push("<div class=\"content-mask\"></div><div" + (jade.attr("id", overlayId, true, true)) + " class=\"content-overlay\"></div>");}.call(this,"overlayId" in locals_for_with?locals_for_with.overlayId:typeof overlayId!=="undefined"?overlayId:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -557,8 +562,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div class=\"content-mask\"></div><div class=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input id=\"close-recipe\" type=\"button\" value=\"Close\"><h2>Ingredients</h2><ul id=\"ingredients\">");
+	;var locals_for_with = (locals || {});(function (overlayId, recipe, undefined) {
+	buf.push("<div class=\"content-mask\"></div><div" + (jade.attr("id", overlayId, true, true)) + " class=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input id=\"close-recipe\" type=\"button\" value=\"Close\"><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -604,7 +609,7 @@
 	  }
 	}).call(this);
 
-	buf.push("</ol></div></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
+	buf.push("</ol></div></div>");}.call(this,"overlayId" in locals_for_with?locals_for_with.overlayId:typeof overlayId!=="undefined"?overlayId:undefined,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -674,7 +679,7 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -693,19 +698,18 @@
 	  }
 
 	  _createClass(RecipeManager, [{
-	    key: 'currentMethod',
+	    key: "currentMethod",
 	    value: function currentMethod() {
 	      return this.recipe.methods[this.currentMethodIndex];
 	    }
 	  }, {
-	    key: 'nextMethod',
+	    key: "nextMethod",
 	    value: function nextMethod() {
-	      console.log('next called');
 	      if (this.currentMethodIndex < this.recipe.methods.length - 1) this.currentMethodIndex++;
 	      return this.currentMethod();
 	    }
 	  }, {
-	    key: 'previousMethod',
+	    key: "previousMethod",
 	    value: function previousMethod() {
 	      if (this.currentMethodIndex > 0) this.currentMethodIndex--;
 	      return this.currentMethod();
@@ -921,8 +925,11 @@
 	var _eventHandlers = __webpack_require__(23);
 
 	function renderOverlay(templateName, context) {
-	  findOverlay(templateName).innerHTML = renderTemplate(templateName, context);
+	  context.overlayId = overlayId(templateName);
+	  var overlay = findOverlay(templateName);
+	  overlay.innerHTML = renderTemplate(templateName, context);
 	  onClickClose(templateName);
+	  return overlay;
 	}
 
 	function renderTemplate(templateName, context) {
@@ -931,13 +938,16 @@
 
 	function onClickClose(templateName) {
 	  (0, _eventHandlers.onClickId)('close-' + templateName, function () {
-	    var overlay = document.getElementById('content-overlay-' + templateName);
-	    overlay.innerHTML = '';
+	    document.getElementById(overlayId(templateName)).innerHTML = '';
 	  });
 	}
 
+	function overlayId(templateName) {
+	  return 'content-overlay-' + templateName;
+	}
+
 	function findOverlay(templateName) {
-	  var id = 'content-overlay-' + templateName;
+	  var id = overlayId(templateName);
 	  var overlay = document.getElementById(id);
 	  if (overlay) return overlay;
 	  overlay = document.createElement('div');
@@ -969,6 +979,42 @@
 	function onClickId(id, handler) {
 	  var button = document.getElementById(id);
 	  if (button) button.onclick = handler;
+	}
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.scaleFontSizeToFill = scaleFontSizeToFill;
+	function scaleFontSizeToFill(element) {
+	  var fontSize = getFontSize(element);
+	  if (isOverflowing(element)) decreaseFontSizeUntilFits(element, fontSize);else increaseFontSizeUntilFull(element, fontSize);
+	}
+
+	function decreaseFontSizeUntilFits(element, fontSize) {
+	  while (isOverflowing(element) && fontSize > 10) {
+	    element.style.fontSize = --fontSize + "px";
+	  }
+	}
+
+	function increaseFontSizeUntilFull(element, fontSize) {
+	  while (!isOverflowing(element)) {
+	    element.style.fontSize = ++fontSize + "px";
+	  }element.style.fontSize = fontSize - 2 + "px";
+	}
+
+	function getFontSize(element) {
+	  var sizeMatch = element.style.fontSize.match(/^(\d+)/);
+	  return sizeMatch ? sizeMatch[0] : 20;
+	}
+
+	function isOverflowing(element) {
+	  return element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth;
 	}
 
 /***/ }

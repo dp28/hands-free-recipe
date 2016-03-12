@@ -4,6 +4,7 @@ import { extractRecipe } from './recipes/extraction'
 import RecipeManager from './recipes/manager'
 import { renderOverlay } from './dom/rendering'
 import { onClickId } from './dom/event-handlers'
+import { scaleFontSizeToFill } from './dom/fit-to-size'
 import { MessageTypes } from './messaging/message-types'
 import { broadcast, handleMessages } from './messaging/messaging'
 import { log, logInfo } from './utils/logging'
@@ -37,8 +38,10 @@ if (recipe) {
         text: recipeManager[`${methodType}Method`](),
         index: recipeManager.currentMethodIndex + 1
       }
+      let overlay = renderOverlay('focused', context)
+      let content = overlay.getElementsByClassName('content-overlay')[0]
+      scaleFontSizeToFill(content)
 
-      renderOverlay('focused', context)
       onClickId('next', focus('next'))
       onClickId('previous', focus('previous'))
     }
