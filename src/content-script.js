@@ -2,7 +2,8 @@
 
 import { extractRecipe } from './recipes/extraction'
 import RecipeManager from './recipes/manager'
-import { renderOverlay } from './rendering/templating'
+import { renderOverlay } from './dom/rendering'
+import { onClickId } from './dom/event-handlers'
 import { MessageTypes } from './messaging/message-types'
 import { broadcast, handleMessages } from './messaging/messaging'
 import { log, logInfo } from './utils/logging'
@@ -34,6 +35,8 @@ if (recipe) {
     return () => {
       let context = { text: recipeManager[`${methodType}Method`]() }
       renderOverlay('focused', context)
+      onClickId('next', focus('next'))
+      onClickId('previous', focus('previous'))
     }
   }
 

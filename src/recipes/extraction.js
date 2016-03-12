@@ -1,4 +1,4 @@
-import { findArrayOf, findArrayByXPath } from '../utils/dom'
+import { findArrayOf, findArrayByXPath } from '../dom/finders'
 import { concat, match } from '../utils/functional'
 import { buildRecipe } from './recipe'
 

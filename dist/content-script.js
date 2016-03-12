@@ -52,7 +52,9 @@
 
 	var _manager2 = _interopRequireDefault(_manager);
 
-	var _templating = __webpack_require__(20);
+	var _rendering = __webpack_require__(22);
+
+	var _eventHandlers = __webpack_require__(23);
 
 	var _messageTypes = __webpack_require__(4);
 
@@ -89,13 +91,15 @@
 	    var focus = function focus(methodType) {
 	      return function () {
 	        var context = { text: recipeManager[methodType + 'Method']() };
-	        (0, _templating.renderOverlay)('focused', context);
+	        (0, _rendering.renderOverlay)('focused', context);
+	        (0, _eventHandlers.onClickId)('next', focus('next'));
+	        (0, _eventHandlers.onClickId)('previous', focus('previous'));
 	      };
 	    };
 
 	    (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
 
-	    (0, _templating.renderOverlay)('recipe', { recipe: recipe });
+	    (0, _rendering.renderOverlay)('recipe', { recipe: recipe });
 
 	    var commands = new _registry2.default();
 	    var recogniser = new _recognition2.default(commands.getExecutor());
@@ -180,7 +184,7 @@
 	});
 	exports.extractRecipe = extractRecipe;
 
-	var _dom = __webpack_require__(6);
+	var _finders = __webpack_require__(21);
 
 	var _functional = __webpack_require__(14);
 
@@ -194,12 +198,12 @@
 
 	function findListItemsWithin(typeName, element) {
 	  var listsIn = findListsWhere(isSemantically(typeName));
-	  return (0, _dom.findArrayByXPath)('./li')(listsIn(element)[0]).map(textWithoutTooltips);
+	  return (0, _finders.findArrayByXPath)('./li')(listsIn(element)[0]).map(textWithoutTooltips);
 	}
 
 	function findListsWhere(subXPath) {
 	  var listXPath = ".//*[local-name()='ol' or local-name()='ul']";
-	  return (0, _dom.findArrayByXPath)(listXPath + subXPath);
+	  return (0, _finders.findArrayByXPath)(listXPath + subXPath);
 	}
 
 	function isSemantically(typeName) {
@@ -210,54 +214,12 @@
 	  var removeToolTipText = function removeToolTipText(text, tip) {
 	    return text.replace(tip.textContent, '');
 	  };
-	  var tooltips = (0, _dom.findArrayByXPath)('.//*[contains(@role, "tooltip")]')(node);
+	  var tooltips = (0, _finders.findArrayByXPath)('.//*[contains(@role, "tooltip")]')(node);
 	  return tooltips.reduce(removeToolTipText, node.textContent);
 	}
 
 /***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.findArrayOf = findArrayOf;
-	exports.findArrayByXPath = findArrayByXPath;
-	exports.asArray = asArray;
-	exports.findByXPath = findByXPath;
-	function findArrayOf(element) {
-	  return function (selector) {
-	    return asArray(element.querySelectorAll(selector));
-	  };
-	}
-
-	function findArrayByXPath(xPath) {
-	  return function (element) {
-	    return iteratorToArray(findByXPath(element, xPath));
-	  };
-	}
-
-	function asArray(arrayLike) {
-	  return Array.prototype.slice.call(arrayLike);
-	}
-
-	function findByXPath(element, xPath) {
-	  if (element) return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);else return element;
-	}
-
-	function iteratorToArray(iterator) {
-	  var array = [];
-	  var next = iterator ? iterator.iterateNext() : iterator;
-	  while (next) {
-	    array.push(next);
-	    next = iterator.iterateNext();
-	  }
-	  return array;
-	}
-
-/***/ },
+/* 6 */,
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -292,7 +254,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (text) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"focused-text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><input id=\"next\" type=\"button\" value=\"next\"><input id=\"previous\" type=\"button\" value=\"previous\"><div id=\"focused-text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -591,8 +553,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (close, recipe, undefined) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input type=\"button\" value=\"Close\"" + (jade.attr("onClick", '(' + (close) + ')("recipe")', true, true)) + "><h2>Ingredients</h2><ul id=\"ingredients\">");
+	;var locals_for_with = (locals || {});(function (recipe, undefined) {
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input type=\"button\" value=\"Close\"><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -638,7 +600,7 @@
 	  }
 	}).call(this);
 
-	buf.push("</ol></div></div>");}.call(this,"close" in locals_for_with?locals_for_with.close:typeof close!=="undefined"?close:undefined,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
+	buf.push("</ol></div></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -897,7 +859,51 @@
 	exports.default = Registry;
 
 /***/ },
-/* 20 */
+/* 20 */,
+/* 21 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.findArrayOf = findArrayOf;
+	exports.findArrayByXPath = findArrayByXPath;
+	exports.asArray = asArray;
+	exports.findByXPath = findByXPath;
+	function findArrayOf(element) {
+	  return function (selector) {
+	    return asArray(element.querySelectorAll(selector));
+	  };
+	}
+
+	function findArrayByXPath(xPath) {
+	  return function (element) {
+	    return iteratorToArray(findByXPath(element, xPath));
+	  };
+	}
+
+	function asArray(arrayLike) {
+	  return Array.prototype.slice.call(arrayLike);
+	}
+
+	function findByXPath(element, xPath) {
+	  if (element) return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);else return element;
+	}
+
+	function iteratorToArray(iterator) {
+	  var array = [];
+	  var next = iterator ? iterator.iterateNext() : iterator;
+	  while (next) {
+	    array.push(next);
+	    next = iterator.iterateNext();
+	  }
+	  return array;
+	}
+
+/***/ },
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -909,7 +915,6 @@
 	exports.closeOverlay = closeOverlay;
 	exports.renderTemplate = renderTemplate;
 	function renderOverlay(templateName, context) {
-	  context.close = closeOverlay;
 	  findOverlay(templateName).innerHTML = renderTemplate(templateName, context);
 	}
 
@@ -929,6 +934,30 @@
 	  overlay.id = id;
 	  document.body.appendChild(overlay);
 	  return overlay;
+	}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.onClickBroadcast = onClickBroadcast;
+	exports.onClickId = onClickId;
+
+	var _messaging = __webpack_require__(3);
+
+	function onClickBroadcast(id, messageType) {
+	  document.getElementById(id).onclick = function () {
+	    return (0, _messaging.broadcast)(messageType);
+	  };
+	}
+
+	function onClickId(id, handler) {
+	  document.getElementById(id).onclick = handler;
 	}
 
 /***/ }

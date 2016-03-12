@@ -1,5 +1,4 @@
 export function renderOverlay(templateName, context) {
-  context.close = closeOverlay
   findOverlay(templateName).innerHTML = renderTemplate(templateName, context)
 }
 

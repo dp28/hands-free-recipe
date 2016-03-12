@@ -50,25 +50,19 @@
 
 	var _messageTypes = __webpack_require__(4);
 
-	var _templating = __webpack_require__(20);
+	var _rendering = __webpack_require__(22);
+
+	var _eventHandlers = __webpack_require__(23);
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	(function () {
 
 	  function replaceHtml(context) {
-	    document.body.innerHTML = (0, _templating.renderTemplate)('popup', context);
-	    document.getElementById('next').onclick = function () {
-	      (0, _messaging.broadcast)(_messageTypes.MessageTypes.NEXT_METHOD);
-	    };
-
-	    document.getElementById('focus').onclick = function () {
-	      (0, _messaging.broadcast)(_messageTypes.MessageTypes.FOCUS_METHOD);
-	    };
-
-	    document.getElementById('previous').onclick = function () {
-	      (0, _messaging.broadcast)(_messageTypes.MessageTypes.PREVIOUS_METHOD);
-	    };
+	    document.body.innerHTML = (0, _rendering.renderTemplate)('popup', context);
+	    (0, _eventHandlers.onClickBroadcast)('next', _messageTypes.MessageTypes.NEXT_METHOD);
+	    (0, _eventHandlers.onClickBroadcast)('focus', _messageTypes.MessageTypes.FOCUS_METHOD);
+	    (0, _eventHandlers.onClickBroadcast)('previous', _messageTypes.MessageTypes.PREVIOUS_METHOD);
 	  }
 
 	  document.addEventListener('DOMContentLoaded', function () {
@@ -177,7 +171,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (text) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"focused-text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><input id=\"next\" type=\"button\" value=\"next\"><input id=\"previous\" type=\"button\" value=\"previous\"><div id=\"focused-text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -476,8 +470,8 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (close, recipe, undefined) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input type=\"button\" value=\"Close\"" + (jade.attr("onClick", '(' + (close) + ')("recipe")', true, true)) + "><h2>Ingredients</h2><ul id=\"ingredients\">");
+	;var locals_for_with = (locals || {});(function (recipe, undefined) {
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input type=\"button\" value=\"Close\"><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -523,7 +517,7 @@
 	  }
 	}).call(this);
 
-	buf.push("</ol></div></div>");}.call(this,"close" in locals_for_with?locals_for_with.close:typeof close!=="undefined"?close:undefined,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
+	buf.push("</ol></div></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -533,7 +527,9 @@
 /* 17 */,
 /* 18 */,
 /* 19 */,
-/* 20 */
+/* 20 */,
+/* 21 */,
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -545,7 +541,6 @@
 	exports.closeOverlay = closeOverlay;
 	exports.renderTemplate = renderTemplate;
 	function renderOverlay(templateName, context) {
-	  context.close = closeOverlay;
 	  findOverlay(templateName).innerHTML = renderTemplate(templateName, context);
 	}
 
@@ -565,6 +560,30 @@
 	  overlay.id = id;
 	  document.body.appendChild(overlay);
 	  return overlay;
+	}
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.onClickBroadcast = onClickBroadcast;
+	exports.onClickId = onClickId;
+
+	var _messaging = __webpack_require__(3);
+
+	function onClickBroadcast(id, messageType) {
+	  document.getElementById(id).onclick = function () {
+	    return (0, _messaging.broadcast)(messageType);
+	  };
+	}
+
+	function onClickId(id, handler) {
+	  document.getElementById(id).onclick = handler;
 	}
 
 /***/ }
