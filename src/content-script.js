@@ -4,8 +4,9 @@ import { extractRecipe } from './recipes/extraction'
 import { findByXPath, renderTemplate } from './utils/dom'
 import { MessageTypes } from './messaging/message-types'
 import { broadcast } from './messaging/messaging'
-import { log } from './utils/logging'
+import { log, logInfo } from './utils/logging'
 import Recogniser from './speech/recognition'
+import executeCommand from './commands/execute'
 
 function say(text) {
   console.log('Saying', text)
@@ -24,6 +25,5 @@ if (recipe) {
   document.body.innerHTML = renderTemplate('recipe', { recipe })
 }
 
-let recogniser = new Recogniser(log('heard:'))
+let recogniser = new Recogniser(executeCommand)
 recogniser.start()
-

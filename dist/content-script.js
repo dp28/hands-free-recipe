@@ -60,6 +60,10 @@
 
 	var _recognition2 = _interopRequireDefault(_recognition);
 
+	var _execute = __webpack_require__(16);
+
+	var _execute2 = _interopRequireDefault(_execute);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function say(text) {
@@ -79,7 +83,7 @@
 	  document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
 	}
 
-	var recogniser = new _recognition2.default((0, _logging.log)('heard:'));
+	var recogniser = new _recognition2.default(_execute2.default);
 	recogniser.start();
 
 /***/ },
@@ -728,6 +732,34 @@
 	var logError = exports.logError = log('Error:');
 
 	var logInfo = exports.logInfo = log('Info:');
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = execute;
+
+	var _logging = __webpack_require__(15);
+
+	function execute(commandString) {
+	  var command = parseCommand(commandString);
+	  var handler = commands[command];
+	  handler ? handler() : (0, _logging.logError)('Command "' + command + '" not handled');
+	}
+
+	function parseCommand(rawCommand) {
+	  return rawCommand.trim();
+	}
+
+	var commands = {
+	  test: (0, _logging.log)('You passed the test'),
+	  next: (0, _logging.log)('Now what?')
+	};
 
 /***/ }
 /******/ ]);
