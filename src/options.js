@@ -1,11 +1,15 @@
 'use strict';
 
 import Recogniser from './speech/recognition'
-import CommandRegistry from './commands/registry'
+import { broadcast } from './messaging/messaging'
+import { MessageTypes } from './messaging/message-types'
 
 console.log('loaded')
 
-let commands = new CommandRegistry()
-let recogniser = new Recogniser(commands.getExecutor())
+function broadcastSpeechInput(input) {
+  broadcast(MessageTypes.SPEECH_INPUT, input)
+}
+
+let recogniser = new Recogniser(broadcastSpeechInput)
 
 recogniser.start()

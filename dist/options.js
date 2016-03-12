@@ -51,18 +51,84 @@
 
 	var _recognition2 = _interopRequireDefault(_recognition);
 
-	var _registry = __webpack_require__(19);
+	var _messaging = __webpack_require__(3);
 
-	var _registry2 = _interopRequireDefault(_registry);
+	var _messageTypes = __webpack_require__(4);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	console.log('loaded');
 
-	var commands = new _registry2.default();
-	var recogniser = new _recognition2.default(commands.getExecutor());
+	function broadcastSpeechInput(input) {
+	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.SPEECH_INPUT, input);
+	}
+
+	var recogniser = new _recognition2.default(broadcastSpeechInput);
 
 	recogniser.start();
+
+/***/ },
+
+/***/ 3:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.broadcast = broadcast;
+	exports.handleMessages = handleMessages;
+
+	var _logging = __webpack_require__(17);
+
+	function broadcast(messageType, data) {
+	  var message = { messageType: messageType, data: data };
+	  (0, _logging.logInfo)('sending', message);
+	  chrome.runtime.sendMessage(message);
+	  sendMessagetoActiveTab(message);
+	}
+
+	function handleMessages(handler) {
+	  console.log('registering', handler);
+	  chrome.runtime.onMessage.addListener(handleMessage(handler));
+	}
+
+	function handleMessage(handler) {
+	  return function (message) {
+	    (0, _logging.logInfo)('received', message);
+	    var handlerFunction = handler[message.messageType];
+	    handlerFunction ? handlerFunction(message.data) : null;
+	  };
+	}
+
+	function sendMessagetoActiveTab(message) {
+	  if (chrome.tabs) {
+	    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	      (0, _logging.logInfo)('sending to active tab');
+	      chrome.tabs.sendMessage(tabs[0].id, message);
+	    });
+	  }
+	}
+
+/***/ },
+
+/***/ 4:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var MessageTypes = exports.MessageTypes = {
+	  RECIPE_FOUND: 'recipe_found',
+	  NEXT_METHOD: 'next_method',
+	  PREVIOUS_METHOD: 'previous_method',
+	  FOCUS_METHOD: 'focus_method',
+	  SPEECH_INPUT: 'speech_input',
+	  SAY: 'say'
+	};
 
 /***/ },
 
@@ -158,59 +224,6 @@
 	}();
 
 	exports.default = Recogniser;
-
-/***/ },
-
-/***/ 19:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _logging = __webpack_require__(17);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Registry = function () {
-	  function Registry() {
-	    _classCallCheck(this, Registry);
-
-	    this.commands = { test: (0, _logging.log)('It works') };
-	  }
-
-	  _createClass(Registry, [{
-	    key: 'register',
-	    value: function register(command, handler) {
-	      this.commands[command] = handler;
-	    }
-	  }, {
-	    key: 'getExecutor',
-	    value: function getExecutor() {
-	      return this.executeCommand.bind(this);
-	    }
-	  }, {
-	    key: 'executeCommand',
-	    value: function executeCommand(commandName) {
-	      var command = this.parseCommand(commandName);
-	      var handler = this.commands[command];
-	      handler ? handler() : (0, _logging.logError)('Command "' + command + '" not handled');
-	    }
-	  }, {
-	    key: 'parseCommand',
-	    value: function parseCommand(rawCommand) {
-	      return rawCommand.trim();
-	    }
-	  }]);
-
-	  return Registry;
-	}();
-
-	exports.default = Registry;
 
 /***/ }
 

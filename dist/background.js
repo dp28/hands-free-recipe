@@ -40,8 +40,9 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -63,8 +64,8 @@
 	(0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.SAY, _say2.default));
 
 /***/ },
-/* 1 */,
-/* 2 */
+
+/***/ 2:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -110,8 +111,9 @@
 	}
 
 /***/ },
-/* 3 */
-/***/ function(module, exports) {
+
+/***/ 3:
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -120,9 +122,12 @@
 	});
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
+
+	var _logging = __webpack_require__(17);
+
 	function broadcast(messageType, data) {
 	  var message = { messageType: messageType, data: data };
-	  console.log('sending', message);
+	  (0, _logging.logInfo)('sending', message);
 	  chrome.runtime.sendMessage(message);
 	  sendMessagetoActiveTab(message);
 	}
@@ -134,7 +139,7 @@
 
 	function handleMessage(handler) {
 	  return function (message) {
-	    console.log('received', message);
+	    (0, _logging.logInfo)('received', message);
 	    var handlerFunction = handler[message.messageType];
 	    handlerFunction ? handlerFunction(message.data) : null;
 	  };
@@ -143,13 +148,15 @@
 	function sendMessagetoActiveTab(message) {
 	  if (chrome.tabs) {
 	    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	      (0, _logging.logInfo)('sending to active tab');
 	      chrome.tabs.sendMessage(tabs[0].id, message);
 	    });
 	  }
 	}
 
 /***/ },
-/* 4 */
+
+/***/ 4:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -162,8 +169,37 @@
 	  NEXT_METHOD: 'next_method',
 	  PREVIOUS_METHOD: 'previous_method',
 	  FOCUS_METHOD: 'focus_method',
+	  SPEECH_INPUT: 'speech_input',
 	  SAY: 'say'
 	};
 
+/***/ },
+
+/***/ 17:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.log = log;
+	function log(tag) {
+	  return function () {
+	    var _console;
+
+	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
+	      messages[_key] = arguments[_key];
+	    }
+
+	    (_console = console).log.apply(_console, [tag].concat(messages));
+	  };
+	}
+
+	var logError = exports.logError = log('Error:');
+
+	var logInfo = exports.logInfo = log('Info:');
+
 /***/ }
-/******/ ]);
+
+/******/ });

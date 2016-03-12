@@ -1,6 +1,8 @@
+import { logInfo } from '../utils/logging'
+
 export function broadcast(messageType, data) {
   let message = { messageType, data }
-  console.log('sending', message)
+  logInfo('sending', message)
   chrome.runtime.sendMessage(message)
   sendMessagetoActiveTab(message)
 }
@@ -12,7 +14,7 @@ export function handleMessages(handler) {
 
 function handleMessage(handler) {
   return message => {
-    console.log('received', message)
+    logInfo('received', message)
     let handlerFunction = handler[message.messageType]
     handlerFunction ? handlerFunction(message.data) : null
   }
@@ -21,6 +23,7 @@ function handleMessage(handler) {
 function sendMessagetoActiveTab(message) {
   if (chrome.tabs) {
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      logInfo('sending to active tab')
       chrome.tabs.sendMessage(tabs[0].id, message)
     })
   }

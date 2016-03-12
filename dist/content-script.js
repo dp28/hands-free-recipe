@@ -64,10 +64,6 @@
 
 	var _logging = __webpack_require__(17);
 
-	var _recognition = __webpack_require__(18);
-
-	var _recognition2 = _interopRequireDefault(_recognition);
-
 	var _registry = __webpack_require__(19);
 
 	var _registry2 = _interopRequireDefault(_registry);
@@ -110,7 +106,6 @@
 	    (0, _rendering.renderOverlay)('recipe', { recipe: recipe });
 
 	    var commands = new _registry2.default();
-	    var recogniser = new _recognition2.default(commands.getExecutor());
 	    var recipeManager = new _manager2.default(recipe);
 
 	    commands.register('read current', function () {
@@ -120,7 +115,7 @@
 	      return say(recipeManager.nextMethod());
 	    });
 
-	    (0, _messaging.handleMessages)((_handleMessages = {}, _defineProperty(_handleMessages, _messageTypes.MessageTypes.NEXT_METHOD, focus('next')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.FOCUS_METHOD, focus('current')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.PREVIOUS_METHOD, focus('previous')), _handleMessages));
+	    (0, _messaging.handleMessages)((_handleMessages = {}, _defineProperty(_handleMessages, _messageTypes.MessageTypes.NEXT_METHOD, focus('next')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.FOCUS_METHOD, focus('current')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.PREVIOUS_METHOD, focus('previous')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.SPEECH_INPUT, commands.getExecutor()), _handleMessages));
 	  })();
 	}
 
@@ -128,7 +123,7 @@
 /* 1 */,
 /* 2 */,
 /* 3 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
@@ -137,9 +132,12 @@
 	});
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
+
+	var _logging = __webpack_require__(17);
+
 	function broadcast(messageType, data) {
 	  var message = { messageType: messageType, data: data };
-	  console.log('sending', message);
+	  (0, _logging.logInfo)('sending', message);
 	  chrome.runtime.sendMessage(message);
 	  sendMessagetoActiveTab(message);
 	}
@@ -151,7 +149,7 @@
 
 	function handleMessage(handler) {
 	  return function (message) {
-	    console.log('received', message);
+	    (0, _logging.logInfo)('received', message);
 	    var handlerFunction = handler[message.messageType];
 	    handlerFunction ? handlerFunction(message.data) : null;
 	  };
@@ -160,6 +158,7 @@
 	function sendMessagetoActiveTab(message) {
 	  if (chrome.tabs) {
 	    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	      (0, _logging.logInfo)('sending to active tab');
 	      chrome.tabs.sendMessage(tabs[0].id, message);
 	    });
 	  }
@@ -179,6 +178,7 @@
 	  NEXT_METHOD: 'next_method',
 	  PREVIOUS_METHOD: 'previous_method',
 	  FOCUS_METHOD: 'focus_method',
+	  SPEECH_INPUT: 'speech_input',
 	  SAY: 'say'
 	};
 
@@ -748,73 +748,7 @@
 	var logInfo = exports.logInfo = log('Info:');
 
 /***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _logging = __webpack_require__(17);
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var Recogniser = function () {
-	  function Recogniser(resultHandlerCallback) {
-	    _classCallCheck(this, Recogniser);
-
-	    this.recognition = new webkitSpeechRecognition();
-	    this.resultHandlerCallback = resultHandlerCallback;
-	    this.recognition.onresult = this.handleResult.bind(this);
-	    this.recognition.onerror = _logging.logError;
-	    this.recognition.lang = 'en-GB';
-	    this.continuouslyListen();
-	  }
-
-	  _createClass(Recogniser, [{
-	    key: 'continuouslyListen',
-	    value: function continuouslyListen() {
-	      this.recognition.continuous = true;
-	      this.recognition.onend = this.restart.bind(this);
-	    }
-	  }, {
-	    key: 'start',
-	    value: function start() {
-	      (0, _logging.logInfo)('starting recognition');
-	      this.recognition.start();
-	    }
-	  }, {
-	    key: 'restart',
-	    value: function restart() {
-	      (0, _logging.logInfo)('restarting');
-	      (0, _logging.logInfo)(arguments);
-	      this.recognition.stop();
-	      this.start();
-	    }
-	  }, {
-	    key: 'handleResult',
-	    value: function handleResult(recognitionEvent) {
-	      (0, _logging.log)('result')(recognitionEvent);
-	      this.resultHandlerCallback(this.extractTranscript(recognitionEvent));
-	    }
-	  }, {
-	    key: 'extractTranscript',
-	    value: function extractTranscript(recognitionEvent) {
-	      var result = recognitionEvent.results[recognitionEvent.resultIndex];
-	      return result[0].transcript;
-	    }
-	  }]);
-
-	  return Recogniser;
-	}();
-
-	exports.default = Recogniser;
-
-/***/ },
+/* 18 */,
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
