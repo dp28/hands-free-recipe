@@ -1,8 +1,16 @@
-#recipe.full-size
-  ul#ingredients
-    each ingredient in recipe.ingredients
-      li #{ingredient}
+#recipe-mask
+#recipe-overlay
+  #recipe
+    h1 Recipe
 
-  ol#methods
-    each method in recipe.methods
-      li #{method}
+    h2 Ingredients
+
+    ul#ingredients
+      each ingredient in recipe.ingredients
+        li #{ingredient}
+
+    h2 Method
+
+    ol#methods
+      each method in recipe.methods
+        li #{method}

@@ -471,7 +471,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div id=\"recipe\" class=\"full-size\"><ul id=\"ingredients\">");
+	buf.push("<div id=\"recipe-mask\"></div><div id=\"recipe-overlay\"><div id=\"recipe\"><h1>Recipe</h1><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -494,7 +494,7 @@
 	  }
 	}).call(this);
 
-	buf.push("</ul><ol id=\"methods\">");
+	buf.push("</ul><h2>Method</h2><ol id=\"methods\">");
 	// iterate recipe.methods
 	;(function(){
 	  var $$obj = recipe.methods;
@@ -517,7 +517,7 @@
 	  }
 	}).call(this);
 
-	buf.push("</ol></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
+	buf.push("</ol></div></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ }
