@@ -61,6 +61,14 @@
 	    document.getElementById('next').onclick = function () {
 	      (0, _messaging.broadcast)(_messageTypes.MessageTypes.NEXT_METHOD);
 	    };
+
+	    document.getElementById('focus').onclick = function () {
+	      (0, _messaging.broadcast)(_messageTypes.MessageTypes.FOCUS_METHOD);
+	    };
+
+	    document.getElementById('previous').onclick = function () {
+	      (0, _messaging.broadcast)(_messageTypes.MessageTypes.PREVIOUS_METHOD);
+	    };
 	  }
 
 	  document.addEventListener('DOMContentLoaded', function () {
@@ -128,6 +136,7 @@
 	var MessageTypes = exports.MessageTypes = {
 	  RECIPE_FOUND: 'recipe_found',
 	  NEXT_METHOD: 'next_method',
+	  PREVIOUS_METHOD: 'previous_method',
 	  SAY: 'say'
 	};
 
@@ -454,7 +463,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><input id=\"next\" type=\"button\" value=\"next\"></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><input id=\"focus\" type=\"button\" value=\"focus\"><input id=\"next\" type=\"button\" value=\"next\"><input id=\"previous\" type=\"button\" value=\"previous\"></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
 	}
 
 /***/ },

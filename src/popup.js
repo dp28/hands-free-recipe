@@ -11,6 +11,14 @@ import { renderTemplate } from './rendering/templating'
     document.getElementById('next').onclick = () => {
       broadcast(MessageTypes.NEXT_METHOD)
     }
+
+    document.getElementById('focus').onclick = () => {
+      broadcast(MessageTypes.FOCUS_METHOD)
+    }
+
+    document.getElementById('previous').onclick = () => {
+      broadcast(MessageTypes.PREVIOUS_METHOD)
+    }
   }
 
   document.addEventListener('DOMContentLoaded', () => {

@@ -73,9 +73,7 @@
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	function say(text) {
-	  return function () {
-	    return (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
-	  };
+	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
 	}
 
 	console.log('loaded');
@@ -84,6 +82,17 @@
 
 	if (recipe) {
 	  (function () {
+	    var _handleMessages;
+
+	    // recogniser.start()
+
+	    var focus = function focus(methodType) {
+	      return function () {
+	        var context = { text: recipeManager[methodType + 'Method']() };
+	        (0, _templating.renderOverlay)('focused', context);
+	      };
+	    };
+
 	    (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
 
 	    (0, _templating.renderOverlay)('recipe', { recipe: recipe });
@@ -92,13 +101,14 @@
 	    var recogniser = new _recognition2.default(commands.getExecutor());
 	    var recipeManager = new _manager2.default(recipe);
 
-	    commands.register('read current', say(recipeManager.currentMethod));
-	    commands.register('next', say(recipeManager.nextMethod()));
-	    // recogniser.start()
+	    commands.register('read current', function () {
+	      return say(recipeManager.currentMethod);
+	    });
+	    commands.register('next', function () {
+	      return say(recipeManager.nextMethod());
+	    });
 
-	    (0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.NEXT_METHOD, function () {
-	      (0, _templating.renderOverlay)('focused', { text: recipeManager.nextMethod() });
-	    }));
+	    (0, _messaging.handleMessages)((_handleMessages = {}, _defineProperty(_handleMessages, _messageTypes.MessageTypes.NEXT_METHOD, focus('next')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.FOCUS_METHOD, focus('current')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.PREVIOUS_METHOD, focus('previous')), _handleMessages));
 	  })();
 	}
 
@@ -155,6 +165,7 @@
 	var MessageTypes = exports.MessageTypes = {
 	  RECIPE_FOUND: 'recipe_found',
 	  NEXT_METHOD: 'next_method',
+	  PREVIOUS_METHOD: 'previous_method',
 	  SAY: 'say'
 	};
 
@@ -567,7 +578,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><input id=\"next\" type=\"button\" value=\"next\"></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><input id=\"focus\" type=\"button\" value=\"focus\"><input id=\"next\" type=\"button\" value=\"next\"><input id=\"previous\" type=\"button\" value=\"previous\"></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -697,7 +708,7 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -716,15 +727,22 @@
 	  }
 
 	  _createClass(RecipeManager, [{
-	    key: "nextMethod",
-	    value: function nextMethod() {
-	      this.currentMethodIndex++;
-	      return this.currentMethod;
+	    key: 'currentMethod',
+	    value: function currentMethod() {
+	      return this.recipe.methods[this.currentMethodIndex];
 	    }
 	  }, {
-	    key: "currentMethod",
-	    get: function get() {
-	      return this.recipe.methods[this.currentMethodIndex];
+	    key: 'nextMethod',
+	    value: function nextMethod() {
+	      console.log('next called');
+	      if (this.currentMethodIndex < this.recipe.methods.length - 1) this.currentMethodIndex++;
+	      return this.currentMethod();
+	    }
+	  }, {
+	    key: 'previousMethod',
+	    value: function previousMethod() {
+	      if (this.currentMethodIndex > 0) this.currentMethodIndex--;
+	      return this.currentMethod();
 	    }
 	  }]);
 

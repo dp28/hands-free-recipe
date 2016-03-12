@@ -10,7 +10,7 @@ import Recogniser from './speech/recognition'
 import CommandRegistry from './commands/registry'
 
 function say(text) {
-  return () => broadcast(MessageTypes.SAY, text)
+  broadcast(MessageTypes.SAY, text)
 }
 
 console.log('loaded')
@@ -26,13 +26,20 @@ if (recipe) {
   let recogniser = new Recogniser(commands.getExecutor())
   let recipeManager = new RecipeManager(recipe)
 
-  commands.register('read current', say(recipeManager.currentMethod))
-  commands.register('next', say(recipeManager.nextMethod()))
+  commands.register('read current', () => say(recipeManager.currentMethod))
+  commands.register('next', () => say(recipeManager.nextMethod()))
   // recogniser.start()
 
-  handleMessages({
-    [MessageTypes.NEXT_METHOD]: function() {
-      renderOverlay('focused', { text: recipeManager.nextMethod() })
+  function focus(methodType) {
+    return () => {
+      let context = { text: recipeManager[`${methodType}Method`]() }
+      renderOverlay('focused', context)
     }
+  }
+
+  handleMessages({
+    [MessageTypes.NEXT_METHOD]: focus('next'),
+    [MessageTypes.FOCUS_METHOD]: focus('current'),
+    [MessageTypes.PREVIOUS_METHOD]: focus('previous')
   })
 }
