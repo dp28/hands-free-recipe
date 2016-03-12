@@ -8,11 +8,6 @@ import { log, logInfo } from './utils/logging'
 import Recogniser from './speech/recognition'
 import executeCommand from './commands/execute'
 
-function say(text) {
-  console.log('Saying', text)
-  broadcast(MessageTypes.SAY, text)
-}
-
 console.log('loaded')
 let recipe = extractRecipe()
 

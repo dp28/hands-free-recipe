@@ -66,11 +66,6 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function say(text) {
-	  console.log('Saying', text);
-	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
-	}
-
 	console.log('loaded');
 	var recipe = (0, _extraction.extractRecipe)();
 
@@ -746,6 +741,10 @@
 
 	var _logging = __webpack_require__(15);
 
+	var _messageTypes = __webpack_require__(3);
+
+	var _messaging = __webpack_require__(2);
+
 	function execute(commandString) {
 	  var command = parseCommand(commandString);
 	  var handler = commands[command];
@@ -758,7 +757,10 @@
 
 	var commands = {
 	  test: (0, _logging.log)('You passed the test'),
-	  next: (0, _logging.log)('Now what?')
+	  next: (0, _logging.log)('Now what?'),
+	  'say something': function saySomething() {
+	    (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, 'something');
+	  }
 	};
 
 /***/ }
