@@ -20,7 +20,7 @@ let recipe = extractRecipe()
 if (recipe) {
   broadcast(MessageTypes.RECIPE_FOUND, recipe)
 
-  addRecipeOverlay(recipe)
+  render('recipe', { recipe })
 
   let commands = new CommandRegistry()
   let recogniser = new Recogniser(commands.getExecutor())
@@ -31,9 +31,17 @@ if (recipe) {
   // recogniser.start()
 }
 
-function addRecipeOverlay(recipe) {
-  let overlay = document.createElement('div')
-  overlay.innerHTML = renderTemplate('recipe', { recipe })
+function render(templateName, data) {
+  findOverlay().innerHTML = renderTemplate(templateName, data)
+}
+
+const OVERLAY_ID = 'recipe-content-overlay'
+
+function findOverlay() {
+  let overlay = document.getElementById(OVERLAY_ID)
+  if (overlay)
+    return overlay
+  overlay = document.createElement('div')
   document.body.appendChild(overlay)
-  logInfo('appended')
+  return overlay
 }

@@ -1,4 +1,4 @@
-#recipe-overlay {
+#content-overlay {
   opacity: 1;
   position: fixed;
   z-index: 100000;
@@ -12,7 +12,7 @@
   overflow: auto;
 }
 
-#recipe-mask {
+#content-mask {
   opacity: 0.8;
   position: fixed;
   z-index: 100000;

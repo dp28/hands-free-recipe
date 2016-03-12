@@ -46,11 +46,11 @@
 
 	'use strict';
 
-	var _messaging = __webpack_require__(2);
+	var _messaging = __webpack_require__(3);
 
-	var _messageTypes = __webpack_require__(3);
+	var _messageTypes = __webpack_require__(4);
 
-	var _dom = __webpack_require__(5);
+	var _dom = __webpack_require__(6);
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -74,7 +74,8 @@
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -104,7 +105,7 @@
 	}
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -118,8 +119,8 @@
 	};
 
 /***/ },
-/* 4 */,
-/* 5 */
+/* 5 */,
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -133,7 +134,7 @@
 	exports.asArray = asArray;
 	exports.findByXPath = findByXPath;
 	function renderTemplate(name, context) {
-	  return __webpack_require__(6)("./" + name + ".jade")(context);
+	  return __webpack_require__(7)("./" + name + ".jade")(context);
 	}
 
 	function findArrayOf(element) {
@@ -167,12 +168,14 @@
 	}
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./popup.jade": 7,
-		"./recipe.jade": 10
+		"./focused.jade": 8,
+		"./layouts/overlay.jade": 11,
+		"./popup.jade": 12,
+		"./recipe.jade": 13
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -185,25 +188,25 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 6;
+	webpackContext.id = 7;
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(8);
+	var jade = __webpack_require__(9);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	;var locals_for_with = (locals || {});(function (text) {
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"focused-text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
 	}
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -423,7 +426,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(9).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(10).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -455,23 +458,51 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(8);
+	var jade = __webpack_require__(9);
+
+	module.exports = function template(locals) {
+	var buf = [];
+	var jade_mixins = {};
+	var jade_interp;
+
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"></div>");;return buf.join("");
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var jade = __webpack_require__(9);
+
+	module.exports = function template(locals) {
+	var buf = [];
+	var jade_mixins = {};
+	var jade_interp;
+	;var locals_for_with = (locals || {});(function (title) {
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var jade = __webpack_require__(9);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div id=\"recipe-mask\"></div><div id=\"recipe-overlay\"><div id=\"recipe\"><h1>Recipe</h1><h2>Ingredients</h2><ul id=\"ingredients\">");
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;

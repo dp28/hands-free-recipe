@@ -46,25 +46,25 @@
 
 	'use strict';
 
-	var _extraction = __webpack_require__(4);
+	var _extraction = __webpack_require__(5);
 
-	var _manager = __webpack_require__(13);
+	var _manager = __webpack_require__(16);
 
 	var _manager2 = _interopRequireDefault(_manager);
 
-	var _dom = __webpack_require__(5);
+	var _dom = __webpack_require__(6);
 
-	var _messageTypes = __webpack_require__(3);
+	var _messageTypes = __webpack_require__(4);
 
-	var _messaging = __webpack_require__(2);
+	var _messaging = __webpack_require__(3);
 
-	var _logging = __webpack_require__(14);
+	var _logging = __webpack_require__(17);
 
-	var _recognition = __webpack_require__(15);
+	var _recognition = __webpack_require__(18);
 
 	var _recognition2 = _interopRequireDefault(_recognition);
 
-	var _registry = __webpack_require__(16);
+	var _registry = __webpack_require__(19);
 
 	var _registry2 = _interopRequireDefault(_registry);
 
@@ -83,7 +83,7 @@
 	if (recipe) {
 	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
 
-	  addRecipeOverlay(recipe);
+	  render('recipe', { recipe: recipe });
 
 	  var commands = new _registry2.default();
 	  var recogniser = new _recognition2.default(commands.getExecutor());
@@ -94,16 +94,24 @@
 	  // recogniser.start()
 	}
 
-	function addRecipeOverlay(recipe) {
-	  var overlay = document.createElement('div');
-	  overlay.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
+	function render(templateName, data) {
+	  findOverlay().innerHTML = (0, _dom.renderTemplate)(templateName, data);
+	}
+
+	var OVERLAY_ID = 'recipe-content-overlay';
+
+	function findOverlay() {
+	  var overlay = document.getElementById(OVERLAY_ID);
+	  if (overlay) return overlay;
+	  overlay = document.createElement('div');
 	  document.body.appendChild(overlay);
-	  (0, _logging.logInfo)('appended');
+	  return overlay;
 	}
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -133,7 +141,7 @@
 	}
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -147,7 +155,7 @@
 	};
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -157,11 +165,11 @@
 	});
 	exports.extractRecipe = extractRecipe;
 
-	var _dom = __webpack_require__(5);
+	var _dom = __webpack_require__(6);
 
-	var _functional = __webpack_require__(11);
+	var _functional = __webpack_require__(14);
 
-	var _recipe = __webpack_require__(12);
+	var _recipe = __webpack_require__(15);
 
 	function extractRecipe() {
 	  var ingredients = findListItemsWithin('ingredients', document.body);
@@ -192,7 +200,7 @@
 	}
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -206,7 +214,7 @@
 	exports.asArray = asArray;
 	exports.findByXPath = findByXPath;
 	function renderTemplate(name, context) {
-	  return __webpack_require__(6)("./" + name + ".jade")(context);
+	  return __webpack_require__(7)("./" + name + ".jade")(context);
 	}
 
 	function findArrayOf(element) {
@@ -240,12 +248,14 @@
 	}
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./popup.jade": 7,
-		"./recipe.jade": 10
+		"./focused.jade": 8,
+		"./layouts/overlay.jade": 11,
+		"./popup.jade": 12,
+		"./recipe.jade": 13
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -258,25 +268,25 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 6;
+	webpackContext.id = 7;
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(8);
+	var jade = __webpack_require__(9);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	;var locals_for_with = (locals || {});(function (text) {
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"focused-text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
 	}
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -496,7 +506,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(9).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(10).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -528,23 +538,51 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(8);
+	var jade = __webpack_require__(9);
+
+	module.exports = function template(locals) {
+	var buf = [];
+	var jade_mixins = {};
+	var jade_interp;
+
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"></div>");;return buf.join("");
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var jade = __webpack_require__(9);
+
+	module.exports = function template(locals) {
+	var buf = [];
+	var jade_mixins = {};
+	var jade_interp;
+	;var locals_for_with = (locals || {});(function (title) {
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var jade = __webpack_require__(9);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div id=\"recipe-mask\"></div><div id=\"recipe-overlay\"><div id=\"recipe\"><h1>Recipe</h1><h2>Ingredients</h2><ul id=\"ingredients\">");
+	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -594,7 +632,7 @@
 	}
 
 /***/ },
-/* 11 */
+/* 14 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -627,7 +665,7 @@
 	}
 
 /***/ },
-/* 12 */
+/* 15 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -657,7 +695,7 @@
 	}
 
 /***/ },
-/* 13 */
+/* 16 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -697,7 +735,7 @@
 	exports.default = RecipeManager;
 
 /***/ },
-/* 14 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -723,7 +761,7 @@
 	var logInfo = exports.logInfo = log('Info:');
 
 /***/ },
-/* 15 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -734,7 +772,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(14);
+	var _logging = __webpack_require__(17);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -790,7 +828,7 @@
 	exports.default = Recogniser;
 
 /***/ },
-/* 16 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -801,7 +839,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(14);
+	var _logging = __webpack_require__(17);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

@@ -46,13 +46,13 @@
 
 	'use strict';
 
-	var _say = __webpack_require__(1);
+	var _say = __webpack_require__(2);
 
 	var _say2 = _interopRequireDefault(_say);
 
-	var _messaging = __webpack_require__(2);
+	var _messaging = __webpack_require__(3);
 
-	var _messageTypes = __webpack_require__(3);
+	var _messageTypes = __webpack_require__(4);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -63,7 +63,8 @@
 	(0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.SAY, _say2.default));
 
 /***/ },
-/* 1 */
+/* 1 */,
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -109,7 +110,7 @@
 	}
 
 /***/ },
-/* 2 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -139,7 +140,7 @@
 	}
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';

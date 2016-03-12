@@ -47,11 +47,11 @@
 
 	'use strict';
 
-	var _recognition = __webpack_require__(15);
+	var _recognition = __webpack_require__(18);
 
 	var _recognition2 = _interopRequireDefault(_recognition);
 
-	var _registry = __webpack_require__(16);
+	var _registry = __webpack_require__(19);
 
 	var _registry2 = _interopRequireDefault(_registry);
 
@@ -66,7 +66,7 @@
 
 /***/ },
 
-/***/ 14:
+/***/ 17:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -93,7 +93,7 @@
 
 /***/ },
 
-/***/ 15:
+/***/ 18:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -104,7 +104,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(14);
+	var _logging = __webpack_require__(17);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -161,7 +161,7 @@
 
 /***/ },
 
-/***/ 16:
+/***/ 19:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -172,7 +172,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(14);
+	var _logging = __webpack_require__(17);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
