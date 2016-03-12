@@ -48,7 +48,7 @@
 
 	var _extraction = __webpack_require__(4);
 
-	var _manager = __webpack_require__(18);
+	var _manager = __webpack_require__(13);
 
 	var _manager2 = _interopRequireDefault(_manager);
 
@@ -58,13 +58,13 @@
 
 	var _messaging = __webpack_require__(2);
 
-	var _logging = __webpack_require__(15);
+	var _logging = __webpack_require__(14);
 
-	var _recognition = __webpack_require__(14);
+	var _recognition = __webpack_require__(15);
 
 	var _recognition2 = _interopRequireDefault(_recognition);
 
-	var _registry = __webpack_require__(17);
+	var _registry = __webpack_require__(16);
 
 	var _registry2 = _interopRequireDefault(_registry);
 
@@ -652,8 +652,73 @@
 	}
 
 /***/ },
-/* 13 */,
+/* 13 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var RecipeManager = function () {
+	  function RecipeManager(recipe) {
+	    _classCallCheck(this, RecipeManager);
+
+	    this.recipe = recipe;
+	    this.currentMethodIndex = 0;
+	  }
+
+	  _createClass(RecipeManager, [{
+	    key: "nextMethod",
+	    value: function nextMethod() {
+	      this.currentMethodIndex++;
+	      return this.currentMethod;
+	    }
+	  }, {
+	    key: "currentMethod",
+	    get: function get() {
+	      return this.recipe.methods[this.currentMethodIndex];
+	    }
+	  }]);
+
+	  return RecipeManager;
+	}();
+
+	exports.default = RecipeManager;
+
+/***/ },
 /* 14 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.log = log;
+	function log(tag) {
+	  return function () {
+	    var _console;
+
+	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
+	      messages[_key] = arguments[_key];
+	    }
+
+	    (_console = console).log.apply(_console, [tag].concat(messages));
+	  };
+	}
+
+	var logError = exports.logError = log('Error:');
+
+	var logInfo = exports.logInfo = log('Info:');
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -664,7 +729,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(15);
+	var _logging = __webpack_require__(14);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -720,34 +785,7 @@
 	exports.default = Recogniser;
 
 /***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.log = log;
-	function log(tag) {
-	  return function () {
-	    var _console;
-
-	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
-	      messages[_key] = arguments[_key];
-	    }
-
-	    (_console = console).log.apply(_console, [tag].concat(messages));
-	  };
-	}
-
-	var logError = exports.logError = log('Error:');
-
-	var logInfo = exports.logInfo = log('Info:');
-
-/***/ },
-/* 16 */,
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -758,7 +796,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(15);
+	var _logging = __webpack_require__(14);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -797,46 +835,6 @@
 	}();
 
 	exports.default = Registry;
-
-/***/ },
-/* 18 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var RecipeManager = function () {
-	  function RecipeManager(recipe) {
-	    _classCallCheck(this, RecipeManager);
-
-	    this.recipe = recipe;
-	    this.currentMethodIndex = 0;
-	  }
-
-	  _createClass(RecipeManager, [{
-	    key: "nextMethod",
-	    value: function nextMethod() {
-	      this.currentMethodIndex++;
-	      return this.currentMethod;
-	    }
-	  }, {
-	    key: "currentMethod",
-	    get: function get() {
-	      return this.recipe.methods[this.currentMethodIndex];
-	    }
-	  }]);
-
-	  return RecipeManager;
-	}();
-
-	exports.default = RecipeManager;
 
 /***/ }
 /******/ ]);

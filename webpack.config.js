@@ -2,7 +2,8 @@ module.exports = {
   entry: {
     background: "./src/background.js",
     "content-script": "./src/content-script.js",
-    popup: "./src/popup.js"
+    popup: "./src/popup.js",
+    options: "./src/options.js",
   },
   output: {
     path: "./dist",
