@@ -50,9 +50,9 @@
 
 	var _say2 = _interopRequireDefault(_say);
 
-	var _messaging = __webpack_require__(11);
+	var _messaging = __webpack_require__(2);
 
-	var _messageTypes = __webpack_require__(12);
+	var _messageTypes = __webpack_require__(3);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -109,16 +109,7 @@
 	}
 
 /***/ },
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -148,7 +139,7 @@
 	}
 
 /***/ },
-/* 12 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';

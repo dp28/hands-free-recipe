@@ -22,3 +22,17 @@ if (recipe) {
   document.body.innerHTML = renderTemplate('recipe', { recipe })
 }
 
+function buildListener() {
+  let listener = new webkitSpeechRecognition()
+  let log = message => function() { console.log(message, arguments) }
+  listener.onstart = log('starting listening...')
+  listener.onresult = log('heard')
+  listener.onerror = log('recogntion error')
+  listener.onend = log('.. stopping listening...')
+  listener.continuous = true
+  listener.lang = 'en-GB'
+  return listener
+}
+
+buildListener().start()
+

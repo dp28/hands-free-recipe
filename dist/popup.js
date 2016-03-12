@@ -40,18 +40,17 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _messaging = __webpack_require__(11);
+	var _messaging = __webpack_require__(2);
 
-	var _messageTypes = __webpack_require__(12);
+	var _messageTypes = __webpack_require__(3);
 
-	var _dom = __webpack_require__(3);
+	var _dom = __webpack_require__(5);
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -72,10 +71,58 @@
 	    replaceHtml({ title: 'Recipe found' });
 	  }));
 	})();
+	document.addEventListener('DOMContentLoaded', function () {
+	  renderStatus('Listening ...');
+	});
 
 /***/ },
+/* 1 */,
+/* 2 */
+/***/ function(module, exports) {
 
-/***/ 3:
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.broadcast = broadcast;
+	exports.handleMessages = handleMessages;
+	function broadcast(messageType, data) {
+	  var message = { messageType: messageType, data: data };
+	  console.log('sending', message);
+	  chrome.runtime.sendMessage(message);
+	}
+
+	function handleMessages(handler) {
+	  console.log('registering', handler);
+	  chrome.runtime.onMessage.addListener(handleMessage(handler));
+	}
+
+	function handleMessage(handler) {
+	  return function (message) {
+	    console.log('received', message);
+	    var handlerFunction = handler[message.messageType];
+	    handlerFunction ? handlerFunction(message.data) : null;
+	  };
+	}
+
+/***/ },
+/* 3 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var MessageTypes = exports.MessageTypes = {
+	  RECIPE_FOUND: 'recipe_found',
+	  SAY: 'say'
+	};
+
+/***/ },
+/* 4 */,
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -89,7 +136,7 @@
 	exports.asArray = asArray;
 	exports.findByXPath = findByXPath;
 	function renderTemplate(name, context) {
-	  return __webpack_require__(53)("./" + name + ".jade")(context);
+	  return __webpack_require__(6)("./" + name + ".jade")(context);
 	}
 
 	function findArrayOf(element) {
@@ -123,61 +170,43 @@
 	}
 
 /***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
 
-/***/ 11:
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.broadcast = broadcast;
-	exports.handleMessages = handleMessages;
-	function broadcast(messageType, data) {
-	  var message = { messageType: messageType, data: data };
-	  console.log('sending', message);
-	  chrome.runtime.sendMessage(message);
-	}
-
-	function handleMessages(handler) {
-	  console.log('registering', handler);
-	  chrome.runtime.onMessage.addListener(handleMessage(handler));
-	}
-
-	function handleMessage(handler) {
-	  return function (message) {
-	    console.log('received', message);
-	    var handlerFunction = handler[message.messageType];
-	    handlerFunction ? handlerFunction(message.data) : null;
-	  };
-	}
-
-/***/ },
-
-/***/ 12:
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var MessageTypes = exports.MessageTypes = {
-	  RECIPE_FOUND: 'recipe_found',
-	  SAY: 'say'
+	var map = {
+		"./popup.jade": 7,
+		"./recipe.jade": 10
 	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 6;
+
 
 /***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
 
-/***/ 41:
-/***/ function(module, exports) {
+	var jade = __webpack_require__(8);
 
-	/* (ignored) */
+	module.exports = function template(locals) {
+	var buf = [];
+	var jade_mixins = {};
+	var jade_interp;
+	;var locals_for_with = (locals || {});(function (title) {
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	}
 
 /***/ },
-
-/***/ 44:
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -397,7 +426,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(41).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(9).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -429,104 +458,24 @@
 
 
 /***/ },
+/* 9 */
+/***/ function(module, exports) {
 
-/***/ 52:
+	/* (ignored) */
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(44);
+	var jade = __webpack_require__(8);
 
 	module.exports = function template(locals) {
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
-	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
-	}
 
-/***/ },
-
-/***/ 53:
-/***/ function(module, exports, __webpack_require__) {
-
-	var map = {
-		"./popup.jade": 52,
-		"./recipe.jade": 54
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
-	module.exports = webpackContext;
-	webpackContext.id = 53;
-
-
-/***/ },
-
-/***/ 54:
-/***/ function(module, exports, __webpack_require__) {
-
-	var jade = __webpack_require__(44);
-
-	module.exports = function template(locals) {
-	var buf = [];
-	var jade_mixins = {};
-	var jade_interp;
-	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div id=\"recipe\" class=\"full-size\"><ul id=\"ingredients\">");
-	// iterate recipe.ingredients
-	;(function(){
-	  var $$obj = recipe.ingredients;
-	  if ('number' == typeof $$obj.length) {
-
-	    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-	      var ingredient = $$obj[$index];
-
-	buf.push("<li>" + (jade.escape((jade_interp = ingredient) == null ? '' : jade_interp)) + "</li>");
-	    }
-
-	  } else {
-	    var $$l = 0;
-	    for (var $index in $$obj) {
-	      $$l++;      var ingredient = $$obj[$index];
-
-	buf.push("<li>" + (jade.escape((jade_interp = ingredient) == null ? '' : jade_interp)) + "</li>");
-	    }
-
-	  }
-	}).call(this);
-
-	buf.push("</ul><ol id=\"methods\">");
-	// iterate recipe.methods
-	;(function(){
-	  var $$obj = recipe.methods;
-	  if ('number' == typeof $$obj.length) {
-
-	    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
-	      var method = $$obj[$index];
-
-	buf.push("<li>" + (jade.escape((jade_interp = method) == null ? '' : jade_interp)) + "</li>");
-	    }
-
-	  } else {
-	    var $$l = 0;
-	    for (var $index in $$obj) {
-	      $$l++;      var method = $$obj[$index];
-
-	buf.push("<li>" + (jade.escape((jade_interp = method) == null ? '' : jade_interp)) + "</li>");
-	    }
-
-	  }
-	}).call(this);
-
-	buf.push("</ol></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
+	buf.push("");;return buf.join("");
 	}
 
 /***/ }
-
-/******/ });
+/******/ ]);
