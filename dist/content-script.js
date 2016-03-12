@@ -54,6 +54,12 @@
 
 	var _messaging = __webpack_require__(2);
 
+	var _recognition = __webpack_require__(14);
+
+	var _recognition2 = _interopRequireDefault(_recognition);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 	function say(text) {
 	  console.log('Saying', text);
 	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
@@ -71,23 +77,7 @@
 	  document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
 	}
 
-	function startListener() {
-	  var listener = new webkitSpeechRecognition();
-	  var log = function log(message) {
-	    return function () {
-	      console.log(message, arguments);
-	    };
-	  };
-	  listener.onstart = log('starting listening...');
-	  listener.onresult = log('heard');
-	  listener.onerror = log('recogntion error');
-	  listener.onend = log('.. stopping listening...');
-	  listener.continuous = true;
-	  listener.lang = 'en-GB';
-	  return listener;
-	}
-
-	startListener().start();
+	new _recognition2.default().start();
 
 /***/ },
 /* 1 */,
@@ -531,8 +521,54 @@
 	var buf = [];
 	var jade_mixins = {};
 	var jade_interp;
+	;var locals_for_with = (locals || {});(function (recipe, undefined) {
+	buf.push("<div id=\"recipe\" class=\"full-size\"><ul id=\"ingredients\">");
+	// iterate recipe.ingredients
+	;(function(){
+	  var $$obj = recipe.ingredients;
+	  if ('number' == typeof $$obj.length) {
 
-	buf.push("");;return buf.join("");
+	    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+	      var ingredient = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = ingredient) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  } else {
+	    var $$l = 0;
+	    for (var $index in $$obj) {
+	      $$l++;      var ingredient = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = ingredient) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  }
+	}).call(this);
+
+	buf.push("</ul><ol id=\"methods\">");
+	// iterate recipe.methods
+	;(function(){
+	  var $$obj = recipe.methods;
+	  if ('number' == typeof $$obj.length) {
+
+	    for (var $index = 0, $$l = $$obj.length; $index < $$l; $index++) {
+	      var method = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = method) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  } else {
+	    var $$l = 0;
+	    for (var $index in $$obj) {
+	      $$l++;      var method = $$obj[$index];
+
+	buf.push("<li>" + (jade.escape((jade_interp = method) == null ? '' : jade_interp)) + "</li>");
+	    }
+
+	  }
+	}).call(this);
+
+	buf.push("</ol></div>");}.call(this,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -597,6 +633,95 @@
 	    methods: methods
 	  };
 	}
+
+/***/ },
+/* 13 */,
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _logging = __webpack_require__(15);
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Recogniser = function () {
+	  function Recogniser() {
+	    _classCallCheck(this, Recogniser);
+
+	    this.recognition = new webkitSpeechRecognition();
+	    this.recognition.onresult = this.handleResult.bind(this);
+	    this.recognition.onerror = _logging.logError;
+	    this.recognition.lang = 'en-GB';
+	    this.continuouslyListen();
+	  }
+
+	  _createClass(Recogniser, [{
+	    key: 'continuouslyListen',
+	    value: function continuouslyListen() {
+	      this.recognition.continuous = true;
+	      this.recognition.onend = this.restart.bind(this);
+	    }
+	  }, {
+	    key: 'start',
+	    value: function start() {
+	      console.log('starting recognition');
+	      this.recognition.start();
+	    }
+	  }, {
+	    key: 'restart',
+	    value: function restart() {
+	      console.log('restarting');
+	      this.recognition.stop();
+	      this.start();
+	    }
+	  }, {
+	    key: 'handleResult',
+	    value: function handleResult(recognitionEvent) {
+	      console.log(this.extractTranscript(recognitionEvent));
+	    }
+	  }, {
+	    key: 'extractTranscript',
+	    value: function extractTranscript(recognitionEvent) {
+	      var result = recognitionEvent.results[recognitionEvent.resultIndex];
+	      return result[0].transcript;
+	    }
+	  }]);
+
+	  return Recogniser;
+	}();
+
+	exports.default = Recogniser;
+
+/***/ },
+/* 15 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.log = log;
+	function log(tag) {
+	  return function () {
+	    var _console;
+
+	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
+	      messages[_key] = arguments[_key];
+	    }
+
+	    (_console = console).log.apply(_console, [tag].concat(messages));
+	  };
+	}
+
+	var logError = exports.logError = log('Error:');
 
 /***/ }
 /******/ ]);
