@@ -1,4 +1,4 @@
-import { logError, logInfo } from '../utils/logging'
+import { log, logError, logInfo } from '../utils/logging'
 
 export default class Recogniser {
 
@@ -23,11 +23,13 @@ export default class Recogniser {
 
   restart() {
     logInfo('restarting')
+    logInfo(arguments)
     this.recognition.stop()
     this.start()
   }
 
   handleResult(recognitionEvent) {
+    log('result')(recognitionEvent)
     this.resultHandlerCallback(this.extractTranscript(recognitionEvent))
   }
   extractTranscript(recognitionEvent) {

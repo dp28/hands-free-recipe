@@ -48,6 +48,10 @@
 
 	var _extraction = __webpack_require__(4);
 
+	var _manager = __webpack_require__(18);
+
+	var _manager2 = _interopRequireDefault(_manager);
+
 	var _dom = __webpack_require__(5);
 
 	var _messageTypes = __webpack_require__(3);
@@ -66,26 +70,38 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	console.log('loaded');
-	var recipe = (0, _extraction.extractRecipe)();
-
-	if (recipe) {
-	  var methodXPath = ".//ol/*[contains(@class, 'method')]";
-
-	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
-
-	  var node = (0, _dom.findByXPath)(document.body, methodXPath).iterateNext();
-	  document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
+	function say(text) {
+	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
 	}
+
+	console.log('loaded');
 
 	var commands = new _registry2.default();
 
-	commands.register('say something', function () {
-	  return (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, 'something');
-	});
-
 	var recogniser = new _recognition2.default(commands.getExecutor());
 	recogniser.start();
+
+	var recipe = (0, _extraction.extractRecipe)();
+
+	if (recipe) {
+	  (function () {
+	    var methodXPath = ".//ol/*[contains(@class, 'method')]";
+
+	    (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
+
+	    var node = (0, _dom.findByXPath)(document.body, methodXPath).iterateNext();
+	    document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
+
+	    var recipeManager = new _manager2.default(recipe);
+
+	    commands.register('read current', function () {
+	      return say(recipeManager.currentMethod);
+	    });
+	    commands.register('next', function () {
+	      return say(recipeManager.nextMethod());
+	    });
+	  })();
+	}
 
 /***/ },
 /* 1 */,
@@ -687,12 +703,14 @@
 	    key: 'restart',
 	    value: function restart() {
 	      (0, _logging.logInfo)('restarting');
+	      (0, _logging.logInfo)(arguments);
 	      this.recognition.stop();
 	      this.start();
 	    }
 	  }, {
 	    key: 'handleResult',
 	    value: function handleResult(recognitionEvent) {
+	      (0, _logging.log)('result')(recognitionEvent);
 	      this.resultHandlerCallback(this.extractTranscript(recognitionEvent));
 	    }
 	  }, {
@@ -786,6 +804,46 @@
 	}();
 
 	exports.default = Registry;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var RecipeManager = function () {
+	  function RecipeManager(recipe) {
+	    _classCallCheck(this, RecipeManager);
+
+	    this.recipe = recipe;
+	    this.currentMethodIndex = 0;
+	  }
+
+	  _createClass(RecipeManager, [{
+	    key: "nextMethod",
+	    value: function nextMethod() {
+	      this.currentMethodIndex++;
+	      return this.currentMethod;
+	    }
+	  }, {
+	    key: "currentMethod",
+	    get: function get() {
+	      return this.recipe.methods[this.currentMethodIndex];
+	    }
+	  }]);
+
+	  return RecipeManager;
+	}();
+
+	exports.default = RecipeManager;
 
 /***/ }
 /******/ ]);
