@@ -171,7 +171,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (index, text) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><input id=\"previous\" type=\"button\" value=\"previous\"><input id=\"next\" type=\"button\" value=\"next\"><div id=\"focused-text\"><span class=\"index\">" + (jade.escape((jade_interp = index + '.') == null ? '' : jade_interp)) + "</span><span class=\"text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</span></div></div>");}.call(this,"index" in locals_for_with?locals_for_with.index:typeof index!=="undefined"?index:undefined,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
+	buf.push("<div class=\"content-mask\"></div><div class=\"content-overlay\"><input id=\"close-focused\" type=\"button\" value=\"Close\"><input id=\"previous\" type=\"button\" value=\"previous\"><input id=\"next\" type=\"button\" value=\"next\"><div id=\"focused-text\"><span class=\"index\">" + (jade.escape((jade_interp = index + '.') == null ? '' : jade_interp)) + "</span><span class=\"text\">" + (jade.escape((jade_interp = text) == null ? '' : jade_interp)) + "</span></div></div>");}.call(this,"index" in locals_for_with?locals_for_with.index:typeof index!=="undefined"?index:undefined,"text" in locals_for_with?locals_for_with.text:typeof text!=="undefined"?text:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -443,7 +443,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"></div>");;return buf.join("");
+	buf.push("<div class=\"content-mask\"></div><div class=\"content-overlay\"></div>");;return buf.join("");
 	}
 
 /***/ },
@@ -471,7 +471,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (recipe, undefined) {
-	buf.push("<div id=\"content-mask\"></div><div id=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input type=\"button\" value=\"Close\"><h2>Ingredients</h2><ul id=\"ingredients\">");
+	buf.push("<div class=\"content-mask\"></div><div class=\"content-overlay\"><div id=\"recipe\"><h1>Recipe</h1><input id=\"close-recipe\" type=\"button\" value=\"Close\"><h2>Ingredients</h2><ul id=\"ingredients\">");
 	// iterate recipe.ingredients
 	;(function(){
 	  var $$obj = recipe.ingredients;
@@ -538,18 +538,24 @@
 	  value: true
 	});
 	exports.renderOverlay = renderOverlay;
-	exports.closeOverlay = closeOverlay;
 	exports.renderTemplate = renderTemplate;
+
+	var _eventHandlers = __webpack_require__(23);
+
 	function renderOverlay(templateName, context) {
 	  findOverlay(templateName).innerHTML = renderTemplate(templateName, context);
-	}
-
-	function closeOverlay(templateName) {
-	  document.getElementById('content-overlay-' + templateName).innerHTML = '';
+	  onClickClose(templateName);
 	}
 
 	function renderTemplate(templateName, context) {
 	  return __webpack_require__(7)("./" + templateName + '.jade')(context);
+	}
+
+	function onClickClose(templateName) {
+	  (0, _eventHandlers.onClickId)('close-' + templateName, function () {
+	    var overlay = document.getElementById('content-overlay-' + templateName);
+	    overlay.innerHTML = '';
+	  });
 	}
 
 	function findOverlay(templateName) {
@@ -583,7 +589,8 @@
 	}
 
 	function onClickId(id, handler) {
-	  document.getElementById(id).onclick = handler;
+	  var button = document.getElementById(id);
+	  if (button) button.onclick = handler;
 	}
 
 /***/ }

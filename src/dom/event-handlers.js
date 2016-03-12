@@ -5,5 +5,7 @@ export function onClickBroadcast(id, messageType) {
 }
 
 export function onClickId(id, handler) {
-  document.getElementById(id).onclick = handler
+  let button = document.getElementById(id)
+  if (button)
+    button.onclick = handler
 }
