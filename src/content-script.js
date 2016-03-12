@@ -6,7 +6,7 @@ import { MessageTypes } from './messaging/message-types'
 import { broadcast } from './messaging/messaging'
 import { log, logInfo } from './utils/logging'
 import Recogniser from './speech/recognition'
-import executeCommand from './commands/execute'
+import CommandRegistry from './commands/registry'
 
 console.log('loaded')
 let recipe = extractRecipe()
@@ -20,5 +20,9 @@ if (recipe) {
   document.body.innerHTML = renderTemplate('recipe', { recipe })
 }
 
-let recogniser = new Recogniser(executeCommand)
+let commands = new CommandRegistry()
+
+commands.register('say something', () => broadcast(MessageTypes.SAY, 'something'))
+
+let recogniser = new Recogniser(commands.getExecutor())
 recogniser.start()

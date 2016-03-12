@@ -60,9 +60,9 @@
 
 	var _recognition2 = _interopRequireDefault(_recognition);
 
-	var _execute = __webpack_require__(16);
+	var _registry = __webpack_require__(17);
 
-	var _execute2 = _interopRequireDefault(_execute);
+	var _registry2 = _interopRequireDefault(_registry);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -78,7 +78,13 @@
 	  document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
 	}
 
-	var recogniser = new _recognition2.default(_execute2.default);
+	var commands = new _registry2.default();
+
+	commands.register('say something', function () {
+	  return (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, 'something');
+	});
+
+	var recogniser = new _recognition2.default(commands.getExecutor());
 	recogniser.start();
 
 /***/ },
@@ -729,7 +735,8 @@
 	var logInfo = exports.logInfo = log('Info:');
 
 /***/ },
-/* 16 */
+/* 16 */,
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -737,31 +744,48 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = execute;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _logging = __webpack_require__(15);
 
-	var _messageTypes = __webpack_require__(3);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var _messaging = __webpack_require__(2);
+	var Registry = function () {
+	  function Registry() {
+	    _classCallCheck(this, Registry);
 
-	function execute(commandString) {
-	  var command = parseCommand(commandString);
-	  var handler = commands[command];
-	  handler ? handler() : (0, _logging.logError)('Command "' + command + '" not handled');
-	}
-
-	function parseCommand(rawCommand) {
-	  return rawCommand.trim();
-	}
-
-	var commands = {
-	  test: (0, _logging.log)('You passed the test'),
-	  next: (0, _logging.log)('Now what?'),
-	  'say something': function saySomething() {
-	    (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, 'something');
+	    this.commands = { test: (0, _logging.log)('It works') };
 	  }
-	};
+
+	  _createClass(Registry, [{
+	    key: 'register',
+	    value: function register(command, handler) {
+	      this.commands[command] = handler;
+	    }
+	  }, {
+	    key: 'getExecutor',
+	    value: function getExecutor() {
+	      return this.executeCommand.bind(this);
+	    }
+	  }, {
+	    key: 'executeCommand',
+	    value: function executeCommand(commandName) {
+	      var command = this.parseCommand(commandName);
+	      var handler = this.commands[command];
+	      handler ? handler() : (0, _logging.logError)('Command "' + command + '" not handled');
+	    }
+	  }, {
+	    key: 'parseCommand',
+	    value: function parseCommand(rawCommand) {
+	      return rawCommand.trim();
+	    }
+	  }]);
+
+	  return Registry;
+	}();
+
+	exports.default = Registry;
 
 /***/ }
 /******/ ]);
