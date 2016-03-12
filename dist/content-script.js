@@ -71,36 +71,29 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function say(text) {
-	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
+	  return function () {
+	    return (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
+	  };
 	}
 
 	console.log('loaded');
 
-	var commands = new _registry2.default();
-
-	var recogniser = new _recognition2.default(commands.getExecutor());
-	recogniser.start();
-
 	var recipe = (0, _extraction.extractRecipe)();
 
 	if (recipe) {
-	  (function () {
-	    var methodXPath = ".//ol/*[contains(@class, 'method')]";
+	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
 
-	    (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
+	  var methodXPath = ".//ol/*[contains(@class, 'method')]";
+	  var node = (0, _dom.findByXPath)(document.body, methodXPath).iterateNext();
+	  document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
 
-	    var node = (0, _dom.findByXPath)(document.body, methodXPath).iterateNext();
-	    document.body.innerHTML = (0, _dom.renderTemplate)('recipe', { recipe: recipe });
+	  var commands = new _registry2.default();
+	  var recogniser = new _recognition2.default(commands.getExecutor());
+	  var recipeManager = new _manager2.default(recipe);
 
-	    var recipeManager = new _manager2.default(recipe);
-
-	    commands.register('read current', function () {
-	      return say(recipeManager.currentMethod);
-	    });
-	    commands.register('next', function () {
-	      return say(recipeManager.nextMethod());
-	    });
-	  })();
+	  commands.register('read current', say(recipeManager.currentMethod));
+	  commands.register('next', say(recipeManager.nextMethod()));
+	  recogniser.start();
 	}
 
 /***/ },

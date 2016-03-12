@@ -10,29 +10,26 @@ import Recogniser from './speech/recognition'
 import CommandRegistry from './commands/registry'
 
 function say(text) {
-  broadcast(MessageTypes.SAY, text)
+  return () => broadcast(MessageTypes.SAY, text)
 }
 
 console.log('loaded')
 
-let commands = new CommandRegistry()
-
-let recogniser = new Recogniser(commands.getExecutor())
-recogniser.start()
-
 let recipe = extractRecipe()
 
 if (recipe) {
-  let methodXPath = ".//ol/*[contains(@class, 'method')]"
-
   broadcast(MessageTypes.RECIPE_FOUND, recipe)
 
+  let methodXPath = ".//ol/*[contains(@class, 'method')]"
   let node = findByXPath(document.body, methodXPath).iterateNext()
   document.body.innerHTML = renderTemplate('recipe', { recipe })
 
+  let commands = new CommandRegistry()
+  let recogniser = new Recogniser(commands.getExecutor())
   let recipeManager = new RecipeManager(recipe)
 
-  commands.register('read current', () => say(recipeManager.currentMethod))
-  commands.register('next', () => say(recipeManager.nextMethod()))
+  commands.register('read current', say(recipeManager.currentMethod))
+  commands.register('next', say(recipeManager.nextMethod()))
+  recogniser.start()
 }
 
