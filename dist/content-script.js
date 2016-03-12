@@ -52,7 +52,7 @@
 
 	var _manager2 = _interopRequireDefault(_manager);
 
-	var _dom = __webpack_require__(6);
+	var _templating = __webpack_require__(20);
 
 	var _messageTypes = __webpack_require__(4);
 
@@ -70,6 +70,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 	function say(text) {
 	  return function () {
 	    return (0, _messaging.broadcast)(_messageTypes.MessageTypes.SAY, text);
@@ -81,35 +83,23 @@
 	var recipe = (0, _extraction.extractRecipe)();
 
 	if (recipe) {
-	  (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
+	  (function () {
+	    (0, _messaging.broadcast)(_messageTypes.MessageTypes.RECIPE_FOUND, recipe);
 
-	  render('recipe', { recipe: recipe, close: close });
+	    (0, _templating.renderOverlay)('recipe', { recipe: recipe });
 
-	  var commands = new _registry2.default();
-	  var recogniser = new _recognition2.default(commands.getExecutor());
-	  var recipeManager = new _manager2.default(recipe);
+	    var commands = new _registry2.default();
+	    var recogniser = new _recognition2.default(commands.getExecutor());
+	    var recipeManager = new _manager2.default(recipe);
 
-	  commands.register('read current', say(recipeManager.currentMethod));
-	  commands.register('next', say(recipeManager.nextMethod()));
-	  // recogniser.start()
-	}
+	    commands.register('read current', say(recipeManager.currentMethod));
+	    commands.register('next', say(recipeManager.nextMethod()));
+	    // recogniser.start()
 
-	function render(templateName, data) {
-	  findOverlay(templateName).innerHTML = (0, _dom.renderTemplate)(templateName, data);
-	}
-
-	function close(templateName) {
-	  document.getElementById('content-overlay-' + templateName).innerHTML = '';
-	}
-
-	function findOverlay(templateName) {
-	  var id = 'content-overlay-' + templateName;
-	  var overlay = document.getElementById(id);
-	  if (overlay) return overlay;
-	  overlay = document.createElement('div');
-	  overlay.id = id;
-	  document.body.appendChild(overlay);
-	  return overlay;
+	    (0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.NEXT_METHOD, function () {
+	      (0, _templating.renderOverlay)('focused', { text: recipeManager.nextMethod() });
+	    }));
+	  })();
 	}
 
 /***/ },
@@ -129,6 +119,7 @@
 	  var message = { messageType: messageType, data: data };
 	  console.log('sending', message);
 	  chrome.runtime.sendMessage(message);
+	  sendMessagetoActiveTab(message);
 	}
 
 	function handleMessages(handler) {
@@ -144,6 +135,14 @@
 	  };
 	}
 
+	function sendMessagetoActiveTab(message) {
+	  if (chrome.tabs) {
+	    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	      chrome.tabs.sendMessage(tabs[0].id, message);
+	    });
+	  }
+	}
+
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
@@ -155,6 +154,7 @@
 	});
 	var MessageTypes = exports.MessageTypes = {
 	  RECIPE_FOUND: 'recipe_found',
+	  NEXT_METHOD: 'next_method',
 	  SAY: 'say'
 	};
 
@@ -205,22 +205,17 @@
 
 /***/ },
 /* 6 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.renderTemplate = renderTemplate;
 	exports.findArrayOf = findArrayOf;
 	exports.findArrayByXPath = findArrayByXPath;
 	exports.asArray = asArray;
 	exports.findByXPath = findByXPath;
-	function renderTemplate(name, context) {
-	  return __webpack_require__(7)("./" + name + ".jade")(context);
-	}
-
 	function findArrayOf(element) {
 	  return function (selector) {
 	    return asArray(element.querySelectorAll(selector));
@@ -572,7 +567,7 @@
 	var jade_mixins = {};
 	var jade_interp;
 	;var locals_for_with = (locals || {});(function (title) {
-	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
+	buf.push("<div class=\"popup\"><div id=\"title\">" + (jade.escape((jade_interp = title) == null ? '' : jade_interp)) + "</div><input id=\"next\" type=\"button\" value=\"next\"></div>");}.call(this,"title" in locals_for_with?locals_for_with.title:typeof title!=="undefined"?title:undefined));;return buf.join("");
 	}
 
 /***/ },
@@ -882,6 +877,41 @@
 	}();
 
 	exports.default = Registry;
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.renderOverlay = renderOverlay;
+	exports.closeOverlay = closeOverlay;
+	exports.renderTemplate = renderTemplate;
+	function renderOverlay(templateName, context) {
+	  context.close = closeOverlay;
+	  findOverlay(templateName).innerHTML = renderTemplate(templateName, context);
+	}
+
+	function closeOverlay(templateName) {
+	  document.getElementById('content-overlay-' + templateName).innerHTML = '';
+	}
+
+	function renderTemplate(templateName, context) {
+	  return __webpack_require__(7)("./" + templateName + '.jade')(context);
+	}
+
+	function findOverlay(templateName) {
+	  var id = 'content-overlay-' + templateName;
+	  var overlay = document.getElementById(id);
+	  if (overlay) return overlay;
+	  overlay = document.createElement('div');
+	  overlay.id = id;
+	  document.body.appendChild(overlay);
+	  return overlay;
+	}
 
 /***/ }
 /******/ ]);

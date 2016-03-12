@@ -124,6 +124,7 @@
 	  var message = { messageType: messageType, data: data };
 	  console.log('sending', message);
 	  chrome.runtime.sendMessage(message);
+	  sendMessagetoActiveTab(message);
 	}
 
 	function handleMessages(handler) {
@@ -139,6 +140,14 @@
 	  };
 	}
 
+	function sendMessagetoActiveTab(message) {
+	  if (chrome.tabs) {
+	    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+	      chrome.tabs.sendMessage(tabs[0].id, message);
+	    });
+	  }
+	}
+
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
@@ -150,6 +159,7 @@
 	});
 	var MessageTypes = exports.MessageTypes = {
 	  RECIPE_FOUND: 'recipe_found',
+	  NEXT_METHOD: 'next_method',
 	  SAY: 'say'
 	};
 
