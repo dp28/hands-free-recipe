@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    "recipe-controller": "./src/controllers/recipe-controller.js"
+    "content-script-controller": "./src/controllers/content-script-controller.js"
   },
   output: {
     path: "./dist",
