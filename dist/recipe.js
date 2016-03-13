@@ -50,14 +50,40 @@
 	  value: true
 	});
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Recipe = function Recipe(ingredients, instructions) {
-	  _classCallCheck(this, Recipe);
+	var Recipe = function () {
+	  function Recipe(ingredients, instructions) {
+	    _classCallCheck(this, Recipe);
 
-	  this.ingredients = ingredients;
-	  this.instructions = instructions;
-	};
+	    this.ingredients = ingredients;
+	    this.instructions = instructions;
+	    this.instructionIndex = 0;
+	  }
+
+	  _createClass(Recipe, [{
+	    key: "currentInstruction",
+	    value: function currentInstruction() {
+	      return this.instructions[this.instructionIndex];
+	    }
+	  }, {
+	    key: "nextInstruction",
+	    value: function nextInstruction() {
+	      if (this.instructionIndex < this.instructions.length - 1) this.instructionIndex++;
+	      return this.currentInstruction();
+	    }
+	  }, {
+	    key: "previousInstruction",
+	    value: function previousInstruction() {
+	      if (this.instructionIndex > 0) this.instructionIndex--;
+	      return this.currentInstruction();
+	    }
+	  }]);
+
+	  return Recipe;
+	}();
 
 	exports.default = Recipe;
 
