@@ -48,11 +48,11 @@
 
 	var _messaging = __webpack_require__(3);
 
-	var _messageTypes = __webpack_require__(4);
+	var _messageTypes = __webpack_require__(5);
 
-	var _rendering = __webpack_require__(22);
+	var _rendering = __webpack_require__(11);
 
-	var _eventHandlers = __webpack_require__(23);
+	var _eventHandlers = __webpack_require__(12);
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -94,7 +94,7 @@
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
 
-	var _logging = __webpack_require__(17);
+	var _logging = __webpack_require__(4);
 
 	function broadcast(messageType, data) {
 	  var message = { messageType: messageType, data: data };
@@ -134,6 +134,32 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.log = log;
+	function log(tag) {
+	  return function () {
+	    var _console;
+
+	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
+	      messages[_key] = arguments[_key];
+	    }
+
+	    (_console = console).log.apply(_console, [tag].concat(messages));
+	  };
+	}
+
+	var logError = exports.logError = log('Error:');
+
+	var logInfo = exports.logInfo = log('Info:');
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	var MessageTypes = exports.MessageTypes = {
 	  RECIPE_FOUND: 'recipe_found',
 	  NEXT_METHOD: 'next_method',
@@ -144,16 +170,90 @@
 	};
 
 /***/ },
-/* 5 */,
 /* 6 */,
-/* 7 */
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.renderOverlay = renderOverlay;
+	exports.renderTemplate = renderTemplate;
+
+	var _eventHandlers = __webpack_require__(12);
+
+	function renderOverlay(templateName, context) {
+	  context.overlayId = overlayId(templateName);
+	  var overlay = findOverlay(templateName);
+	  overlay.innerHTML = renderTemplate(templateName, context);
+	  onClickClose(templateName);
+	  return overlay;
+	}
+
+	function renderTemplate(templateName, context) {
+	  return __webpack_require__(13)("./" + templateName + '.jade')(context);
+	}
+
+	function onClickClose(templateName) {
+	  (0, _eventHandlers.onClickId)('close-' + templateName, function () {
+	    document.getElementById(overlayId(templateName)).innerHTML = '';
+	  });
+	}
+
+	function overlayId(templateName) {
+	  return 'content-overlay-' + templateName;
+	}
+
+	function findOverlay(templateName) {
+	  var id = overlayId(templateName);
+	  var overlay = document.getElementById(id);
+	  if (overlay) return overlay;
+	  overlay = document.createElement('div');
+	  overlay.id = id;
+	  document.body.appendChild(overlay);
+	  return overlay;
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.onClickBroadcast = onClickBroadcast;
+	exports.onClickId = onClickId;
+
+	var _messaging = __webpack_require__(3);
+
+	function onClickBroadcast(id, messageType) {
+	  document.getElementById(id).onclick = function () {
+	    return (0, _messaging.broadcast)(messageType);
+	  };
+	}
+
+	function onClickId(id, handler) {
+	  var button = document.getElementById(id);
+	  if (button) button.onclick = handler;
+	}
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./focused.jade": 8,
-		"./layouts/overlay.jade": 11,
-		"./popup.jade": 12,
-		"./recipe.jade": 13
+		"./focused.jade": 14,
+		"./layouts/overlay.jade": 17,
+		"./popup.jade": 18,
+		"./recipe.jade": 19
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -166,14 +266,14 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 7;
+	webpackContext.id = 13;
 
 
 /***/ },
-/* 8 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -184,7 +284,7 @@
 	}
 
 /***/ },
-/* 9 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -404,7 +504,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(10).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(16).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -436,16 +536,16 @@
 
 
 /***/ },
-/* 10 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 11 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -456,10 +556,10 @@
 	}
 
 /***/ },
-/* 12 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -470,10 +570,10 @@
 	}
 
 /***/ },
-/* 13 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -527,110 +627,6 @@
 	}).call(this);
 
 	buf.push("</ol></div></div>");}.call(this,"overlayId" in locals_for_with?locals_for_with.overlayId:typeof overlayId!=="undefined"?overlayId:undefined,"recipe" in locals_for_with?locals_for_with.recipe:typeof recipe!=="undefined"?recipe:undefined,"undefined" in locals_for_with?locals_for_with.undefined: false?undefined:undefined));;return buf.join("");
-	}
-
-/***/ },
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.log = log;
-	function log(tag) {
-	  return function () {
-	    var _console;
-
-	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
-	      messages[_key] = arguments[_key];
-	    }
-
-	    (_console = console).log.apply(_console, [tag].concat(messages));
-	  };
-	}
-
-	var logError = exports.logError = log('Error:');
-
-	var logInfo = exports.logInfo = log('Info:');
-
-/***/ },
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.renderOverlay = renderOverlay;
-	exports.renderTemplate = renderTemplate;
-
-	var _eventHandlers = __webpack_require__(23);
-
-	function renderOverlay(templateName, context) {
-	  context.overlayId = overlayId(templateName);
-	  var overlay = findOverlay(templateName);
-	  overlay.innerHTML = renderTemplate(templateName, context);
-	  onClickClose(templateName);
-	  return overlay;
-	}
-
-	function renderTemplate(templateName, context) {
-	  return __webpack_require__(7)("./" + templateName + '.jade')(context);
-	}
-
-	function onClickClose(templateName) {
-	  (0, _eventHandlers.onClickId)('close-' + templateName, function () {
-	    document.getElementById(overlayId(templateName)).innerHTML = '';
-	  });
-	}
-
-	function overlayId(templateName) {
-	  return 'content-overlay-' + templateName;
-	}
-
-	function findOverlay(templateName) {
-	  var id = overlayId(templateName);
-	  var overlay = document.getElementById(id);
-	  if (overlay) return overlay;
-	  overlay = document.createElement('div');
-	  overlay.id = id;
-	  document.body.appendChild(overlay);
-	  return overlay;
-	}
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.onClickBroadcast = onClickBroadcast;
-	exports.onClickId = onClickId;
-
-	var _messaging = __webpack_require__(3);
-
-	function onClickBroadcast(id, messageType) {
-	  document.getElementById(id).onclick = function () {
-	    return (0, _messaging.broadcast)(messageType);
-	  };
-	}
-
-	function onClickId(id, handler) {
-	  var button = document.getElementById(id);
-	  if (button) button.onclick = handler;
 	}
 
 /***/ }

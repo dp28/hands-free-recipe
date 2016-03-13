@@ -40,9 +40,8 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -53,7 +52,7 @@
 
 	var _messaging = __webpack_require__(3);
 
-	var _messageTypes = __webpack_require__(4);
+	var _messageTypes = __webpack_require__(5);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64,8 +63,8 @@
 	(0, _messaging.handleMessages)(_defineProperty({}, _messageTypes.MessageTypes.SAY, _say2.default));
 
 /***/ },
-
-/***/ 2:
+/* 1 */,
+/* 2 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -111,8 +110,7 @@
 	}
 
 /***/ },
-
-/***/ 3:
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -123,7 +121,7 @@
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
 
-	var _logging = __webpack_require__(17);
+	var _logging = __webpack_require__(4);
 
 	function broadcast(messageType, data) {
 	  var message = { messageType: messageType, data: data };
@@ -155,27 +153,7 @@
 	}
 
 /***/ },
-
-/***/ 4:
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var MessageTypes = exports.MessageTypes = {
-	  RECIPE_FOUND: 'recipe_found',
-	  NEXT_METHOD: 'next_method',
-	  PREVIOUS_METHOD: 'previous_method',
-	  FOCUS_METHOD: 'focus_method',
-	  SPEECH_INPUT: 'speech_input',
-	  SAY: 'say'
-	};
-
-/***/ },
-
-/***/ 17:
+/* 4 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -200,6 +178,23 @@
 
 	var logInfo = exports.logInfo = log('Info:');
 
-/***/ }
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
 
-/******/ });
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var MessageTypes = exports.MessageTypes = {
+	  RECIPE_FOUND: 'recipe_found',
+	  NEXT_METHOD: 'next_method',
+	  PREVIOUS_METHOD: 'previous_method',
+	  FOCUS_METHOD: 'focus_method',
+	  SPEECH_INPUT: 'speech_input',
+	  SAY: 'say'
+	};
+
+/***/ }
+/******/ ]);

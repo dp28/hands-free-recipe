@@ -23,12 +23,7 @@ if (recipe) {
 
   renderOverlay('recipe', { recipe })
 
-  let commands = new CommandRegistry()
   let recipeManager = new RecipeManager(recipe)
-
-  commands.register('read current', () => say(recipeManager.currentMethod))
-  commands.register('next', () => say(recipeManager.nextMethod()))
-  // recogniser.start()
 
   function focus(methodType) {
     return () => {
@@ -39,11 +34,18 @@ if (recipe) {
       let overlay = renderOverlay('focused', context)
       let content = overlay.getElementsByClassName('content-overlay')[0]
       scaleFontSizeToFill(content)
+      say(context.text)
 
       onClickId('next', focus('next'))
       onClickId('previous', focus('previous'))
     }
   }
+
+  let commands = new CommandRegistry();
+
+  ['next', 'current', 'previous'].forEach(command => {
+    commands.register(command, focus(command))
+  })
 
   handleMessages({
     [MessageTypes.NEXT_METHOD]: focus('next'),

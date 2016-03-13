@@ -47,13 +47,13 @@
 
 	'use strict';
 
-	var _recognition = __webpack_require__(18);
+	var _recognition = __webpack_require__(22);
 
 	var _recognition2 = _interopRequireDefault(_recognition);
 
 	var _messaging = __webpack_require__(3);
 
-	var _messageTypes = __webpack_require__(4);
+	var _messageTypes = __webpack_require__(5);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -80,7 +80,7 @@
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
 
-	var _logging = __webpack_require__(17);
+	var _logging = __webpack_require__(4);
 
 	function broadcast(messageType, data) {
 	  var message = { messageType: messageType, data: data };
@@ -121,25 +121,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var MessageTypes = exports.MessageTypes = {
-	  RECIPE_FOUND: 'recipe_found',
-	  NEXT_METHOD: 'next_method',
-	  PREVIOUS_METHOD: 'previous_method',
-	  FOCUS_METHOD: 'focus_method',
-	  SPEECH_INPUT: 'speech_input',
-	  SAY: 'say'
-	};
-
-/***/ },
-
-/***/ 17:
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
 	exports.log = log;
 	function log(tag) {
 	  return function () {
@@ -159,7 +140,26 @@
 
 /***/ },
 
-/***/ 18:
+/***/ 5:
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var MessageTypes = exports.MessageTypes = {
+	  RECIPE_FOUND: 'recipe_found',
+	  NEXT_METHOD: 'next_method',
+	  PREVIOUS_METHOD: 'previous_method',
+	  FOCUS_METHOD: 'focus_method',
+	  SPEECH_INPUT: 'speech_input',
+	  SAY: 'say'
+	};
+
+/***/ },
+
+/***/ 22:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -170,7 +170,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(17);
+	var _logging = __webpack_require__(4);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 

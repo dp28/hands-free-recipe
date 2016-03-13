@@ -46,25 +46,25 @@
 
 	'use strict';
 
-	var _extraction = __webpack_require__(5);
+	var _extraction = __webpack_require__(6);
 
-	var _manager = __webpack_require__(16);
+	var _manager = __webpack_require__(10);
 
 	var _manager2 = _interopRequireDefault(_manager);
 
-	var _rendering = __webpack_require__(22);
+	var _rendering = __webpack_require__(11);
 
-	var _eventHandlers = __webpack_require__(23);
+	var _eventHandlers = __webpack_require__(12);
 
-	var _fitToSize = __webpack_require__(24);
+	var _fitToSize = __webpack_require__(20);
 
-	var _messageTypes = __webpack_require__(4);
+	var _messageTypes = __webpack_require__(5);
 
 	var _messaging = __webpack_require__(3);
 
-	var _logging = __webpack_require__(17);
+	var _logging = __webpack_require__(4);
 
-	var _registry = __webpack_require__(19);
+	var _registry = __webpack_require__(21);
 
 	var _registry2 = _interopRequireDefault(_registry);
 
@@ -84,8 +84,6 @@
 	  (function () {
 	    var _handleMessages;
 
-	    // recogniser.start()
-
 	    var focus = function focus(methodType) {
 	      return function () {
 	        var context = {
@@ -95,6 +93,7 @@
 	        var overlay = (0, _rendering.renderOverlay)('focused', context);
 	        var content = overlay.getElementsByClassName('content-overlay')[0];
 	        (0, _fitToSize.scaleFontSizeToFill)(content);
+	        say(context.text);
 
 	        (0, _eventHandlers.onClickId)('next', focus('next'));
 	        (0, _eventHandlers.onClickId)('previous', focus('previous'));
@@ -105,14 +104,12 @@
 
 	    (0, _rendering.renderOverlay)('recipe', { recipe: recipe });
 
-	    var commands = new _registry2.default();
 	    var recipeManager = new _manager2.default(recipe);
 
-	    commands.register('read current', function () {
-	      return say(recipeManager.currentMethod);
-	    });
-	    commands.register('next', function () {
-	      return say(recipeManager.nextMethod());
+	    var commands = new _registry2.default();
+
+	    ['next', 'current', 'previous'].forEach(function (command) {
+	      commands.register(command, focus(command));
 	    });
 
 	    (0, _messaging.handleMessages)((_handleMessages = {}, _defineProperty(_handleMessages, _messageTypes.MessageTypes.NEXT_METHOD, focus('next')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.FOCUS_METHOD, focus('current')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.PREVIOUS_METHOD, focus('previous')), _defineProperty(_handleMessages, _messageTypes.MessageTypes.SPEECH_INPUT, commands.getExecutor()), _handleMessages));
@@ -133,7 +130,7 @@
 	exports.broadcast = broadcast;
 	exports.handleMessages = handleMessages;
 
-	var _logging = __webpack_require__(17);
+	var _logging = __webpack_require__(4);
 
 	function broadcast(messageType, data) {
 	  var message = { messageType: messageType, data: data };
@@ -173,6 +170,32 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.log = log;
+	function log(tag) {
+	  return function () {
+	    var _console;
+
+	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
+	      messages[_key] = arguments[_key];
+	    }
+
+	    (_console = console).log.apply(_console, [tag].concat(messages));
+	  };
+	}
+
+	var logError = exports.logError = log('Error:');
+
+	var logInfo = exports.logInfo = log('Info:');
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 	var MessageTypes = exports.MessageTypes = {
 	  RECIPE_FOUND: 'recipe_found',
 	  NEXT_METHOD: 'next_method',
@@ -183,7 +206,7 @@
 	};
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -193,11 +216,11 @@
 	});
 	exports.extractRecipe = extractRecipe;
 
-	var _finders = __webpack_require__(21);
+	var _finders = __webpack_require__(7);
 
-	var _functional = __webpack_require__(14);
+	var _functional = __webpack_require__(8);
 
-	var _recipe = __webpack_require__(15);
+	var _recipe = __webpack_require__(9);
 
 	function extractRecipe() {
 	  var ingredients = findListItemsWithin('ingredients', document.body);
@@ -228,15 +251,237 @@
 	}
 
 /***/ },
-/* 6 */,
 /* 7 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.findArrayOf = findArrayOf;
+	exports.findArrayByXPath = findArrayByXPath;
+	exports.asArray = asArray;
+	exports.findByXPath = findByXPath;
+	function findArrayOf(element) {
+	  return function (selector) {
+	    return asArray(element.querySelectorAll(selector));
+	  };
+	}
+
+	function findArrayByXPath(xPath) {
+	  return function (element) {
+	    return iteratorToArray(findByXPath(element, xPath));
+	  };
+	}
+
+	function asArray(arrayLike) {
+	  return Array.prototype.slice.call(arrayLike);
+	}
+
+	function findByXPath(element, xPath) {
+	  if (element) return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);else return element;
+	}
+
+	function iteratorToArray(iterator) {
+	  var array = [];
+	  var next = iterator ? iterator.iterateNext() : iterator;
+	  while (next) {
+	    array.push(next);
+	    next = iterator.iterateNext();
+	  }
+	  return array;
+	}
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.forEach = forEach;
+	exports.concat = concat;
+	exports.contains = contains;
+	exports.match = match;
+	function forEach(arrayLike) {
+	  return Array.prototype.forEach.bind(arrayLike);
+	}
+
+	function concat(first, second) {
+	  return first.concat(second);
+	}
+
+	function contains(substring) {
+	  return function (string) {
+	    return string.includes(substring);
+	  };
+	}
+
+	function match(regex) {
+	  return function (string) {
+	    return string.match(regex);
+	  };
+	}
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.buildRecipe = buildRecipe;
+	function buildRecipe(ingredients, methods) {
+	  if (canBuildRecipe(ingredients, methods)) return buildRecipeFromParts(ingredients, methods);
+	  return null;
+	}
+
+	function canBuildRecipe(ingredients, method) {
+	  return nonEmpty(ingredients) && nonEmpty(method);
+	}
+
+	function nonEmpty(list) {
+	  return list && list.length;
+	}
+
+	function buildRecipeFromParts(ingredients, methods) {
+	  return {
+	    ingredients: ingredients,
+	    methods: methods
+	  };
+	}
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var RecipeManager = function () {
+	  function RecipeManager(recipe) {
+	    _classCallCheck(this, RecipeManager);
+
+	    this.recipe = recipe;
+	    this.currentMethodIndex = 0;
+	  }
+
+	  _createClass(RecipeManager, [{
+	    key: "currentMethod",
+	    value: function currentMethod() {
+	      return this.recipe.methods[this.currentMethodIndex];
+	    }
+	  }, {
+	    key: "nextMethod",
+	    value: function nextMethod() {
+	      if (this.currentMethodIndex < this.recipe.methods.length - 1) this.currentMethodIndex++;
+	      return this.currentMethod();
+	    }
+	  }, {
+	    key: "previousMethod",
+	    value: function previousMethod() {
+	      if (this.currentMethodIndex > 0) this.currentMethodIndex--;
+	      return this.currentMethod();
+	    }
+	  }]);
+
+	  return RecipeManager;
+	}();
+
+	exports.default = RecipeManager;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.renderOverlay = renderOverlay;
+	exports.renderTemplate = renderTemplate;
+
+	var _eventHandlers = __webpack_require__(12);
+
+	function renderOverlay(templateName, context) {
+	  context.overlayId = overlayId(templateName);
+	  var overlay = findOverlay(templateName);
+	  overlay.innerHTML = renderTemplate(templateName, context);
+	  onClickClose(templateName);
+	  return overlay;
+	}
+
+	function renderTemplate(templateName, context) {
+	  return __webpack_require__(13)("./" + templateName + '.jade')(context);
+	}
+
+	function onClickClose(templateName) {
+	  (0, _eventHandlers.onClickId)('close-' + templateName, function () {
+	    document.getElementById(overlayId(templateName)).innerHTML = '';
+	  });
+	}
+
+	function overlayId(templateName) {
+	  return 'content-overlay-' + templateName;
+	}
+
+	function findOverlay(templateName) {
+	  var id = overlayId(templateName);
+	  var overlay = document.getElementById(id);
+	  if (overlay) return overlay;
+	  overlay = document.createElement('div');
+	  overlay.id = id;
+	  document.body.appendChild(overlay);
+	  return overlay;
+	}
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.onClickBroadcast = onClickBroadcast;
+	exports.onClickId = onClickId;
+
+	var _messaging = __webpack_require__(3);
+
+	function onClickBroadcast(id, messageType) {
+	  document.getElementById(id).onclick = function () {
+	    return (0, _messaging.broadcast)(messageType);
+	  };
+	}
+
+	function onClickId(id, handler) {
+	  var button = document.getElementById(id);
+	  if (button) button.onclick = handler;
+	}
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./focused.jade": 8,
-		"./layouts/overlay.jade": 11,
-		"./popup.jade": 12,
-		"./recipe.jade": 13
+		"./focused.jade": 14,
+		"./layouts/overlay.jade": 17,
+		"./popup.jade": 18,
+		"./recipe.jade": 19
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -249,14 +494,14 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 7;
+	webpackContext.id = 13;
 
 
 /***/ },
-/* 8 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -267,7 +512,7 @@
 	}
 
 /***/ },
-/* 9 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -487,7 +732,7 @@
 	    throw err;
 	  }
 	  try {
-	    str = str || __webpack_require__(10).readFileSync(filename, 'utf8')
+	    str = str || __webpack_require__(16).readFileSync(filename, 'utf8')
 	  } catch (ex) {
 	    rethrow(err, null, lineno)
 	  }
@@ -519,16 +764,16 @@
 
 
 /***/ },
-/* 10 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 11 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -539,10 +784,10 @@
 	}
 
 /***/ },
-/* 12 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -553,10 +798,10 @@
 	}
 
 /***/ },
-/* 13 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var jade = __webpack_require__(9);
+	var jade = __webpack_require__(15);
 
 	module.exports = function template(locals) {
 	var buf = [];
@@ -613,7 +858,7 @@
 	}
 
 /***/ },
-/* 14 */
+/* 20 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -621,135 +866,35 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.forEach = forEach;
-	exports.concat = concat;
-	exports.contains = contains;
-	exports.match = match;
-	function forEach(arrayLike) {
-	  return Array.prototype.forEach.bind(arrayLike);
+	exports.scaleFontSizeToFill = scaleFontSizeToFill;
+	function scaleFontSizeToFill(element) {
+	  var fontSize = getFontSize(element);
+	  if (isOverflowing(element)) decreaseFontSizeUntilFits(element, fontSize);else increaseFontSizeUntilFull(element, fontSize);
 	}
 
-	function concat(first, second) {
-	  return first.concat(second);
-	}
-
-	function contains(substring) {
-	  return function (string) {
-	    return string.includes(substring);
-	  };
-	}
-
-	function match(regex) {
-	  return function (string) {
-	    return string.match(regex);
-	  };
-	}
-
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.buildRecipe = buildRecipe;
-	function buildRecipe(ingredients, methods) {
-	  if (canBuildRecipe(ingredients, methods)) return buildRecipeFromParts(ingredients, methods);
-	  return null;
-	}
-
-	function canBuildRecipe(ingredients, method) {
-	  return nonEmpty(ingredients) && nonEmpty(method);
-	}
-
-	function nonEmpty(list) {
-	  return list && list.length;
-	}
-
-	function buildRecipeFromParts(ingredients, methods) {
-	  return {
-	    ingredients: ingredients,
-	    methods: methods
-	  };
-	}
-
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	var RecipeManager = function () {
-	  function RecipeManager(recipe) {
-	    _classCallCheck(this, RecipeManager);
-
-	    this.recipe = recipe;
-	    this.currentMethodIndex = 0;
+	function decreaseFontSizeUntilFits(element, fontSize) {
+	  while (isOverflowing(element) && fontSize > 10) {
+	    element.style.fontSize = --fontSize + "px";
 	  }
-
-	  _createClass(RecipeManager, [{
-	    key: "currentMethod",
-	    value: function currentMethod() {
-	      return this.recipe.methods[this.currentMethodIndex];
-	    }
-	  }, {
-	    key: "nextMethod",
-	    value: function nextMethod() {
-	      if (this.currentMethodIndex < this.recipe.methods.length - 1) this.currentMethodIndex++;
-	      return this.currentMethod();
-	    }
-	  }, {
-	    key: "previousMethod",
-	    value: function previousMethod() {
-	      if (this.currentMethodIndex > 0) this.currentMethodIndex--;
-	      return this.currentMethod();
-	    }
-	  }]);
-
-	  return RecipeManager;
-	}();
-
-	exports.default = RecipeManager;
-
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.log = log;
-	function log(tag) {
-	  return function () {
-	    var _console;
-
-	    for (var _len = arguments.length, messages = Array(_len), _key = 0; _key < _len; _key++) {
-	      messages[_key] = arguments[_key];
-	    }
-
-	    (_console = console).log.apply(_console, [tag].concat(messages));
-	  };
 	}
 
-	var logError = exports.logError = log('Error:');
+	function increaseFontSizeUntilFull(element, fontSize) {
+	  while (!isOverflowing(element)) {
+	    element.style.fontSize = ++fontSize + "px";
+	  }element.style.fontSize = fontSize - 2 + "px";
+	}
 
-	var logInfo = exports.logInfo = log('Info:');
+	function getFontSize(element) {
+	  var sizeMatch = element.style.fontSize.match(/^(\d+)/);
+	  return sizeMatch ? sizeMatch[0] : 20;
+	}
+
+	function isOverflowing(element) {
+	  return element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth;
+	}
 
 /***/ },
-/* 18 */,
-/* 19 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -760,7 +905,7 @@
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _logging = __webpack_require__(17);
+	var _logging = __webpack_require__(4);
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -799,157 +944,6 @@
 	}();
 
 	exports.default = Registry;
-
-/***/ },
-/* 20 */,
-/* 21 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.findArrayOf = findArrayOf;
-	exports.findArrayByXPath = findArrayByXPath;
-	exports.asArray = asArray;
-	exports.findByXPath = findByXPath;
-	function findArrayOf(element) {
-	  return function (selector) {
-	    return asArray(element.querySelectorAll(selector));
-	  };
-	}
-
-	function findArrayByXPath(xPath) {
-	  return function (element) {
-	    return iteratorToArray(findByXPath(element, xPath));
-	  };
-	}
-
-	function asArray(arrayLike) {
-	  return Array.prototype.slice.call(arrayLike);
-	}
-
-	function findByXPath(element, xPath) {
-	  if (element) return document.evaluate(xPath, element, null, XPathResult.ANY_TYPE, null);else return element;
-	}
-
-	function iteratorToArray(iterator) {
-	  var array = [];
-	  var next = iterator ? iterator.iterateNext() : iterator;
-	  while (next) {
-	    array.push(next);
-	    next = iterator.iterateNext();
-	  }
-	  return array;
-	}
-
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.renderOverlay = renderOverlay;
-	exports.renderTemplate = renderTemplate;
-
-	var _eventHandlers = __webpack_require__(23);
-
-	function renderOverlay(templateName, context) {
-	  context.overlayId = overlayId(templateName);
-	  var overlay = findOverlay(templateName);
-	  overlay.innerHTML = renderTemplate(templateName, context);
-	  onClickClose(templateName);
-	  return overlay;
-	}
-
-	function renderTemplate(templateName, context) {
-	  return __webpack_require__(7)("./" + templateName + '.jade')(context);
-	}
-
-	function onClickClose(templateName) {
-	  (0, _eventHandlers.onClickId)('close-' + templateName, function () {
-	    document.getElementById(overlayId(templateName)).innerHTML = '';
-	  });
-	}
-
-	function overlayId(templateName) {
-	  return 'content-overlay-' + templateName;
-	}
-
-	function findOverlay(templateName) {
-	  var id = overlayId(templateName);
-	  var overlay = document.getElementById(id);
-	  if (overlay) return overlay;
-	  overlay = document.createElement('div');
-	  overlay.id = id;
-	  document.body.appendChild(overlay);
-	  return overlay;
-	}
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.onClickBroadcast = onClickBroadcast;
-	exports.onClickId = onClickId;
-
-	var _messaging = __webpack_require__(3);
-
-	function onClickBroadcast(id, messageType) {
-	  document.getElementById(id).onclick = function () {
-	    return (0, _messaging.broadcast)(messageType);
-	  };
-	}
-
-	function onClickId(id, handler) {
-	  var button = document.getElementById(id);
-	  if (button) button.onclick = handler;
-	}
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.scaleFontSizeToFill = scaleFontSizeToFill;
-	function scaleFontSizeToFill(element) {
-	  var fontSize = getFontSize(element);
-	  if (isOverflowing(element)) decreaseFontSizeUntilFits(element, fontSize);else increaseFontSizeUntilFull(element, fontSize);
-	}
-
-	function decreaseFontSizeUntilFits(element, fontSize) {
-	  while (isOverflowing(element) && fontSize > 10) {
-	    element.style.fontSize = --fontSize + "px";
-	  }
-	}
-
-	function increaseFontSizeUntilFull(element, fontSize) {
-	  while (!isOverflowing(element)) {
-	    element.style.fontSize = ++fontSize + "px";
-	  }element.style.fontSize = fontSize - 2 + "px";
-	}
-
-	function getFontSize(element) {
-	  var sizeMatch = element.style.fontSize.match(/^(\d+)/);
-	  return sizeMatch ? sizeMatch[0] : 20;
-	}
-
-	function isOverflowing(element) {
-	  return element.offsetHeight < element.scrollHeight || element.offsetWidth < element.scrollWidth;
-	}
 
 /***/ }
 /******/ ]);
