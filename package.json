@@ -5,7 +5,8 @@
   "main": "background.js",
   "scripts": {
     "build": "webpack --progress --colors --watch",
-    "lint": "eslint test/* src/* || true"
+    "lint": "eslint test/* src/* || true",
+    "test": "karma start --single-run=false"
   },
   "author": "Daniel Patterson <dan24patt@gmail.com>",
   "license": "MIT",
@@ -19,6 +20,7 @@
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^0.2.2",
     "karma-mocha": "^0.2.2",
+    "karma-mocha-reporter": "^2.0.0",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^1.7.0",
     "mocha": "^2.4.5",
