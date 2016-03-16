@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    "app": "./src/app/index.js"
+    "app": "./src/app/index.jsx"
   },
   output: {
     path: "./dist",
@@ -16,9 +16,9 @@ module.exports = {
     loaders: [
         { test: /\.jsx?$/, loader: "react-hot!babel", exclude: /node_modules/ },
         { test: /\.jade$/, loader: "jade", exclude: /node_modules/ }
-    ],
-    resolve: {
-      extensions: ['', '.js', '.jsx']
-    }
+    ]
+  },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
   }
 };
