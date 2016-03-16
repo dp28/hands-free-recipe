@@ -1,6 +1,6 @@
 module.exports = {
   entry: {
-    "content-script-controller": "./src/controllers/content-script-controller.js"
+    "app": "./src/app/index.js"
   },
   output: {
     path: "./dist",
@@ -14,8 +14,11 @@ module.exports = {
       { test: /\.js$/, loader: "eslint-loader", exclude: /node_modules/ }
     ],
     loaders: [
-        { test: /\.js$/, loader: "babel-loader", exclude: /node_modules/ },
-        { test: /\.jade$/, loader: "jade-loader", exclude: /node_modules/ }
-    ]
+        { test: /\.jsx?$/, loader: "react-hot!babel", exclude: /node_modules/ },
+        { test: /\.jade$/, loader: "jade", exclude: /node_modules/ }
+    ],
+    resolve: {
+      extensions: ['', '.js', '.jsx']
+    }
   }
 };

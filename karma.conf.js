@@ -7,9 +7,11 @@ module.exports = function (config) {
     singleRun: true,
     frameworks: [ 'mocha' ],
     files: [
+      'test/test-helper.js',
       'test/index.webpack.js'
     ],
     preprocessors: {
+      'test/test-helper.js': [ 'webpack', 'babel' ],
       'test/index.webpack.js': [ 'webpack', 'sourcemap' ]
     },
     reporters: [ 'mocha' ],
