@@ -6,6 +6,9 @@ module.exports = {
     path: "./dist",
     filename: "[name].js"
   },
+  devServer: {
+    contentBase: './dist'
+  },
   module: {
     preLoaders: [
       { test: /\.js$/, loader: "eslint-loader", exclude: /node_modules/ }
