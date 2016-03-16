@@ -1,4 +1,5 @@
-var webpack = require('webpack');
+var webpackConfig = require('./webpack.config.js');
+webpackConfig.devtool = 'inline-source-map'
 
 module.exports = function (config) {
   config.set({
@@ -8,25 +9,11 @@ module.exports = function (config) {
     files: [
       'test/index.webpack.js'
     ],
-    plugins: [
-      'karma-chrome-launcher',
-      'karma-webpack',
-      'karma-sourcemap-loader',
-      'karma-mocha',
-      'karma-mocha-reporter'
-    ],
     preprocessors: {
       'test/index.webpack.js': [ 'webpack', 'sourcemap' ]
     },
     reporters: [ 'mocha' ],
-    webpack: {
-      devtool: 'inline-source-map',
-      module: {
-        loaders: [
-          { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' }
-        ]
-      }
-    },
+    webpack: webpackConfig,
     webpackServer: {
       noInfo: true
     }
