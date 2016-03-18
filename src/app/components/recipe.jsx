@@ -1,11 +1,17 @@
-import React from 'react'
-import IngredientList from './ingredient-list'
-import InstructionList from './instruction-list'
+import React from 'react';
+import { connect } from 'react-redux';
 
-export default ({ recipe }) => (
+import IngredientList from './ingredient-list';
+import InstructionList from './instruction-list';
+
+export const Recipe = ({ recipe }) => (
   <div>
-    <h1>{recipe.title}</h1>
-    <IngredientList ingredients={recipe.ingredients} />
-    <InstructionList instructions={recipe.instructions} />
+    <h1>{recipe.get('title')}</h1>
+    <IngredientList ingredients={recipe.get('ingredients')} />
+    <InstructionList instructions={recipe.get('instructions')} />
   </div>
 );
+
+const mapStateToProps = (state) => ({ recipe: state })
+
+export const RecipeContainer = connect(mapStateToProps)(Recipe);
