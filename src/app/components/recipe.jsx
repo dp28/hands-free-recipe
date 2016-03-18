@@ -12,6 +12,6 @@ export const Recipe = ({ recipe }) => (
   </div>
 );
 
-const mapStateToProps = (state) => ({ recipe: state })
+const mapStateToProps = (state) => ({ recipe: state.get('recipe') })
 
-export const RecipeContainer = connect(mapStateToProps)(Recipe);
+export default connect(mapStateToProps)(Recipe);

@@ -1,11 +1,13 @@
-import { Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 const SET_RECIPE = 'SET_RECIPE';
 
-export default function(state = Map(), action) {
+const initialState = fromJS({ focus: [], recipe: {} });
+
+export default function(state = initialState, action) {
   switch (action.type) {
     case SET_RECIPE:
-      return state.merge(action.recipe);
+      return state.mergeIn(['recipe'], action.recipe);
     default:
       return state;
   }

@@ -5,7 +5,7 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducer'
 import App from './components/app';
-import { RecipeContainer } from './components/recipe';
+import Recipe from './components/recipe';
 import FocusPage from './components/focus-page';
 
 const store = createStore(reducer);
@@ -21,7 +21,7 @@ store.dispatch({
 
 const routes = <Route component={App}>
   <Route path='/focus' component={FocusPage} />
-  <Route path='/' component={RecipeContainer} />
+  <Route path='/' component={Recipe} />
 </Route>;
 
 ReactDOM.render(
