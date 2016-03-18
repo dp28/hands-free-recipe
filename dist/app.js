@@ -66,17 +66,13 @@
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
-	var _app = __webpack_require__(239);
+	var _recipeComponent = __webpack_require__(245);
 
-	var _app2 = _interopRequireDefault(_app);
+	var _recipeComponent2 = _interopRequireDefault(_recipeComponent);
 
-	var _recipe = __webpack_require__(240);
+	var _focusComponent = __webpack_require__(248);
 
-	var _recipe2 = _interopRequireDefault(_recipe);
-
-	var _focusPage = __webpack_require__(243);
-
-	var _focusPage2 = _interopRequireDefault(_focusPage);
+	var _focusComponent2 = _interopRequireDefault(_focusComponent);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -91,11 +87,16 @@
 	  }
 	});
 
+	var PassDownChildren = function PassDownChildren(_ref) {
+	  var children = _ref.children;
+	  return children;
+	};
+
 	var routes = _react2.default.createElement(
 	  _reactRouter.Route,
-	  { component: _app2.default },
-	  _react2.default.createElement(_reactRouter.Route, { path: '/focus', component: _focusPage2.default }),
-	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _recipe2.default })
+	  { component: PassDownChildren },
+	  _react2.default.createElement(_reactRouter.Route, { path: '/focus', component: _focusComponent2.default }),
+	  _react2.default.createElement(_reactRouter.Route, { path: '/', component: _recipeComponent2.default })
 	);
 
 	_reactDom2.default.render(_react2.default.createElement(
@@ -31247,32 +31248,13 @@
 	}));
 
 /***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = function (_ref) {
-	  var children = _ref.children;
-	  return children;
-	};
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "app.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
-
-/***/ },
-/* 240 */
+/* 239 */,
+/* 240 */,
+/* 241 */,
+/* 242 */,
+/* 243 */,
+/* 244 */,
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31290,13 +31272,13 @@
 
 	var _reactRedux = __webpack_require__(226);
 
-	var _ingredientList = __webpack_require__(241);
+	var _ingredientListComponent = __webpack_require__(246);
 
-	var _ingredientList2 = _interopRequireDefault(_ingredientList);
+	var _ingredientListComponent2 = _interopRequireDefault(_ingredientListComponent);
 
-	var _instructionList = __webpack_require__(242);
+	var _instructionListComponent = __webpack_require__(247);
 
-	var _instructionList2 = _interopRequireDefault(_instructionList);
+	var _instructionListComponent2 = _interopRequireDefault(_instructionListComponent);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31310,8 +31292,8 @@
 	      null,
 	      recipe.get('title')
 	    ),
-	    _react2.default.createElement(_ingredientList2.default, { ingredients: recipe.get('ingredients') }),
-	    _react2.default.createElement(_instructionList2.default, { instructions: recipe.get('instructions') })
+	    _react2.default.createElement(_ingredientListComponent2.default, { ingredients: recipe.get('ingredients') }),
+	    _react2.default.createElement(_instructionListComponent2.default, { instructions: recipe.get('instructions') })
 	  );
 	};
 
@@ -31321,10 +31303,10 @@
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Recipe);
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "recipe.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "recipe-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 241 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31358,10 +31340,10 @@
 	  );
 	};
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ingredient-list.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ingredient-list-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 242 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31393,10 +31375,10 @@
 	  );
 	};
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "instruction-list.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "instruction-list-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 243 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31406,7 +31388,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.FocusPage = undefined;
+	exports.Focus = undefined;
 
 	var _react = __webpack_require__(1);
 
@@ -31416,7 +31398,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var FocusPage = exports.FocusPage = function FocusPage(_ref) {
+	var Focus = exports.Focus = function Focus(_ref) {
 	  var text = _ref.text;
 	  return _react2.default.createElement(
 	    'p',
@@ -31431,9 +31413,9 @@
 	  return { text: text };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(FocusPage);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Focus);
 
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "focus-page.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "focus-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ }
 /******/ ]);

@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import IngredientList from './ingredient-list';
-import InstructionList from './instruction-list';
+import IngredientList from '../ingredients/ingredient-list-component';
+import InstructionList from '../instructions/instruction-list-component';
 
 export const Recipe = ({ recipe }) => (
   <div>

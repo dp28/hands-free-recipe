@@ -4,9 +4,8 @@ import { Router, Route, hashHistory } from 'react-router';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from './reducer'
-import App from './components/app';
-import Recipe from './components/recipe';
-import FocusPage from './components/focus-page';
+import Recipe from './recipes/recipe-component';
+import Focus from './focus/focus-component';
 
 const store = createStore(reducer);
 
@@ -19,8 +18,10 @@ store.dispatch({
   }
 });
 
-const routes = <Route component={App}>
-  <Route path='/focus' component={FocusPage} />
+const PassDownChildren = ({ children }) => children;
+
+const routes = <Route component={PassDownChildren}>
+  <Route path='/focus' component={Focus} />
   <Route path='/' component={Recipe} />
 </Route>;
 

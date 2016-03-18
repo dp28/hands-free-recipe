@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux';
 
-export const FocusPage = ({ text }) => (
+export const Focus = ({ text }) => (
   <p>{text}</p>
 );
 
@@ -11,4 +11,4 @@ const mapStateToProps = (state) => {
   return { text };
 }
 
-export default connect(mapStateToProps)(FocusPage);
+export default connect(mapStateToProps)(Focus);
