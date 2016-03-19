@@ -1,6 +1,6 @@
 import { List, fromJS } from 'immutable';
 
-const SET_FOCUS = 'SET_FOCUS';
+import { SET_FOCUS } from './focus-actions';
 
 export default function(state = List(), action) {
   switch (action.type) {
