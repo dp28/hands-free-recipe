@@ -1,10 +1,8 @@
-import Recipe from '../models/recipe';
-
 export default function extractRecipe(element) {
   let ingredients = findListItemsWithin('ingredients', element);
   let instructions = findListItemsWithin('method', element);
   if (nonEmpty(ingredients) && nonEmpty(instructions))
-    return new Recipe(ingredients, instructions);
+    return { ingredients, instructions };
   else
     return null;
 }

@@ -3,11 +3,16 @@ import ReactDOM from 'react-dom';
 import { Router, Route, hashHistory } from 'react-router';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-import reducer from './reducer'
+import { combineReducers } from 'redux-immutable';
+import { Map } from 'immutable';
+
 import Recipe from './recipes/recipe-component';
 import Focus from './focus/focus-component';
+import recipe from './recipes/recipe-reducer';
+import focus from './focus/focus-reducer';
 
-const store = createStore(reducer);
+const reducer = combineReducers({ recipe, focus });
+const store = createStore(reducer, Map());
 
 store.dispatch({
   type: 'SET_RECIPE',

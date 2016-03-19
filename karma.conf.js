@@ -7,10 +7,10 @@ module.exports = function (config) {
     singleRun: true,
     frameworks: [ 'mocha' ],
     files: [
-      'test/index.webpack.js'
+      'src/**/*-spec.js'
     ],
     preprocessors: {
-      'test/index.webpack.js': [ 'webpack', 'sourcemap' ]
+      'src/**/*.js': [ 'webpack', 'sourcemap' ]
     },
     reporters: [ 'mocha' ],
     webpack: webpackConfig,
