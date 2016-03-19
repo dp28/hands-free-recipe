@@ -12,7 +12,7 @@ module.exports = function (config) {
     preprocessors: {
       'src/**/*.js': [ 'webpack', 'sourcemap' ]
     },
-    reporters: [ 'mocha' ],
+    reporters: [ 'mocha', 'notify' ],
     webpack: webpackConfig,
     webpackServer: {
       noInfo: true
