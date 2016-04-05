@@ -31506,13 +31506,14 @@
 
 	var _reactRedux = __webpack_require__(226);
 
-	var _focusActions = __webpack_require__(251);
+	var _focusButtonComponent = __webpack_require__(252);
+
+	var _focusButtonComponent2 = _interopRequireDefault(_focusButtonComponent);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var IngredientList = exports.IngredientList = function IngredientList(_ref) {
 	  var ingredients = _ref.ingredients;
-	  var setFocus = _ref.setFocus;
 	  return _react2.default.createElement(
 	    'ul',
 	    null,
@@ -31520,11 +31521,7 @@
 	      return _react2.default.createElement(
 	        'li',
 	        { key: ingredient },
-	        _react2.default.createElement(
-	          _reactRouter.Link,
-	          { to: 'focus', onClick: setFocus(index) },
-	          ' Focus '
-	        ),
+	        _react2.default.createElement(_focusButtonComponent2.default, { focusOn: ['recipe', 'ingredients', index] }),
 	        ingredient
 	      );
 	    })
@@ -31535,17 +31532,7 @@
 	  return { recipe: state.get('recipe') };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    setFocus: function setFocus(index) {
-	      return function () {
-	        return dispatch((0, _focusActions.setFocus)(['recipe', 'ingredients', index]));
-	      };
-	    }
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(IngredientList);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(IngredientList);
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ingredient-list-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -31805,6 +31792,53 @@
 	};
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "focus-actions.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 252 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.FocusButton = undefined;
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(159);
+
+	var _reactRedux = __webpack_require__(226);
+
+	var _focusActions = __webpack_require__(251);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var FocusButton = exports.FocusButton = function FocusButton(_ref) {
+	  var setFocus = _ref.setFocus;
+	  var focusOn = _ref.focusOn;
+	  return _react2.default.createElement(
+	    _reactRouter.Link,
+	    { to: 'focus', onClick: setFocus(focusOn) },
+	    ' Focus '
+	  );
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return { setFocus: function setFocus(list) {
+	      return function () {
+	        return dispatch((0, _focusActions.setFocus)(list));
+	      };
+	    } };
+	};
+
+	exports.default = (0, _reactRedux.connect)(null, mapDispatchToProps)(FocusButton);
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "focus-button-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ }
 /******/ ]);
