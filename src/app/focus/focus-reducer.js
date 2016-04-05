@@ -16,8 +16,7 @@ function reducer(actionTypeMap) {
 }
 
 function addToFocusIfPossible(focus, toAdd, fullState) {
-  const focusingOn = focus.last();
-  if (typeof focusingOn !== 'number')
+  if (!focus || typeof focus.last() !== 'number')
     return focus;
   const focusList = fullState.getIn(focus.pop().toJS());
   const nextFocus = addToLast(focus, toAdd);

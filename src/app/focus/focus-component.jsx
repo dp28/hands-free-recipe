@@ -1,10 +1,15 @@
 import React from 'react'
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-export const Focus = ({ text }) => (
+import { incrementFocus, decrementFocus } from './focus-actions'
+
+export const Focus = ({ text, incrementFocus, decrementFocus }) => (
   <div>
     <Link to='/'>Back</Link>
+    <button onClick={decrementFocus}>Previous</button>
+    <button onClick={incrementFocus}>Next</button>
     <p>{text}</p>
   </div>
 );
@@ -18,4 +23,8 @@ const mapStateToProps = (state) => {
   return { text };
 }
 
-export default connect(mapStateToProps)(Focus);
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators({ incrementFocus, decrementFocus }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Focus);
