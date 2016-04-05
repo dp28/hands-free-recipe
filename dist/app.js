@@ -62,30 +62,25 @@
 
 	var _reactRedux = __webpack_require__(226);
 
-	var _reduxImmutable = __webpack_require__(244);
+	var _reduxImmutable = __webpack_require__(237);
 
-	var _immutable = __webpack_require__(238);
+	var _immutable = __webpack_require__(242);
 
-	var _recipeComponent = __webpack_require__(240);
+	var _recipeComponent = __webpack_require__(244);
 
 	var _recipeComponent2 = _interopRequireDefault(_recipeComponent);
 
-	var _focusComponent = __webpack_require__(243);
+	var _focusComponent = __webpack_require__(247);
 
 	var _focusComponent2 = _interopRequireDefault(_focusComponent);
 
-	var _recipeReducer = __webpack_require__(239);
+	var _reducer = __webpack_require__(248);
 
-	var _recipeReducer2 = _interopRequireDefault(_recipeReducer);
-
-	var _focusReducer = __webpack_require__(250);
-
-	var _focusReducer2 = _interopRequireDefault(_focusReducer);
+	var _reducer2 = _interopRequireDefault(_reducer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var reducer = (0, _reduxImmutable.combineReducers)({ recipe: _recipeReducer2.default, focus: _focusReducer2.default });
-	var store = (0, _redux.createStore)(reducer, (0, _immutable.Map)());
+	var store = (0, _redux.createStore)(_reducer2.default, (0, _immutable.Map)());
 
 	store.dispatch({
 	  type: 'SET_RECIPE',
@@ -26238,8 +26233,197 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
-/* 237 */,
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.combineReducers = undefined;
+
+	var _combineReducers = __webpack_require__(238);
+
+	var _combineReducers2 = _interopRequireDefault(_combineReducers);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.combineReducers = _combineReducers2.default;
+	//# sourceMappingURL=index.js.map
+
+
+/***/ },
 /* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _utilities = __webpack_require__(239);
+
+	var _immutable = __webpack_require__(242);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/* eslint-disable lodash3/prefer-lodash-method */
+
+	exports.default = function (reducers) {
+	    var reducerKeys = undefined;
+
+	    reducerKeys = Object.keys(reducers);
+
+	    return function (inputState, action) {
+	        if (inputState === undefined) {
+	            inputState = _immutable2.default.Map();
+	        }
+
+	        /* eslint-disable no-process-env */
+	        if (process.env.NODE_ENV !== 'production') {
+	            /* eslint-enable no-process-env */
+	            var warningMessage = undefined;
+
+	            warningMessage = (0, _utilities.getUnexpectedInvocationParameterMessage)(inputState, reducers, action);
+
+	            if (warningMessage) {
+	                /* eslint-disable no-console */
+	                console.error(warningMessage);
+	                /* eslint-enable no-console */
+	            }
+	        }
+
+	        return inputState.withMutations(function (temporaryState) {
+	            reducerKeys.forEach(function (reducerName) {
+	                var currentDomainState = undefined,
+	                    nextDomainState = undefined,
+	                    reducer = undefined;
+
+	                reducer = reducers[reducerName];
+
+	                currentDomainState = temporaryState.get(reducerName);
+
+	                nextDomainState = reducer(currentDomainState, action);
+
+	                (0, _utilities.validateNextState)(nextDomainState, reducerName, action);
+
+	                temporaryState.set(reducerName, nextDomainState);
+	            });
+	        });
+	    };
+	};
+
+	module.exports = exports['default'];
+	//# sourceMappingURL=combineReducers.js.map
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	'create index';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.validateNextState = exports.getUnexpectedInvocationParameterMessage = exports.getStateName = undefined;
+
+	var _getStateName2 = __webpack_require__(240);
+
+	var _getStateName3 = _interopRequireDefault(_getStateName2);
+
+	var _getUnexpectedInvocationParameterMessage2 = __webpack_require__(241);
+
+	var _getUnexpectedInvocationParameterMessage3 = _interopRequireDefault(_getUnexpectedInvocationParameterMessage2);
+
+	var _validateNextState2 = __webpack_require__(243);
+
+	var _validateNextState3 = _interopRequireDefault(_validateNextState2);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	exports.getStateName = _getStateName3.default;
+	exports.getUnexpectedInvocationParameterMessage = _getUnexpectedInvocationParameterMessage3.default;
+	exports.validateNextState = _validateNextState3.default;
+	//# sourceMappingURL=index.js.map
+
+
+/***/ },
+/* 240 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	exports.default = function (action) {
+	    return action && action.type === '@@redux/INIT' ? 'initialState argument passed to createStore' : 'previous state received by the reducer';
+	};
+
+	module.exports = exports['default'];
+	//# sourceMappingURL=getStateName.js.map
+
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _immutable = __webpack_require__(242);
+
+	var _immutable2 = _interopRequireDefault(_immutable);
+
+	var _getStateName = __webpack_require__(240);
+
+	var _getStateName2 = _interopRequireDefault(_getStateName);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	/* eslint-disable lodash3/prefer-lodash-method */
+
+	exports.default = function (state, reducers, action) {
+	    var reducerNames = Object.keys(reducers);
+
+	    if (!reducerNames.length) {
+	        return 'Store does not have a valid reducer. Make sure the argument passed to combineReducers is an object whose values are reducers.';
+	    }
+
+	    var stateName = (0, _getStateName2.default)(action);
+
+	    if (!_immutable2.default.Iterable.isIterable(state)) {
+	        return 'The ' + stateName + ' is of unexpected type. Expected argument to be an instance of Immutable.Iterable with the following properties: "' + reducerNames.join('", "') + '".';
+	    }
+
+	    var unexpectedStatePropertyNames = state.keySeq().toArray().filter(function (name) {
+	        return !reducers.hasOwnProperty(name);
+	    });
+
+	    if (unexpectedStatePropertyNames.length > 0) {
+	        return 'Unexpected ' + (unexpectedStatePropertyNames.length === 1 ? 'property' : 'properties') + ' "' + unexpectedStatePropertyNames.join('", "') + '" found in ' + stateName + '. Expected to find one of the known reducer property names instead: "' + reducerNames.join('", "') + '". Unexpected properties will be ignored.';
+	    }
+
+	    return null;
+	};
+
+	module.exports = exports['default'];
+	//# sourceMappingURL=getUnexpectedInvocationParameterMessage.js.map
+
+
+/***/ },
+/* 242 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -31226,37 +31410,29 @@
 	}));
 
 /***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+/* 243 */
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	    value: true
 	});
 
-	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? (0, _immutable.Map)() : arguments[0];
-	  var action = arguments[1];
+	exports.default = function (nextState, reducerName, action) {
+	    if (typeof nextState === 'undefined') {
+	        throw new Error('Reducer "' + reducerName + '" returned undefined when handling "' + action.type + '" action. To ignore an action, you must explicitly return the previous state.');
+	    }
 
-	  switch (action.type) {
-	    case SET_RECIPE:
-	      return state.merge(action.recipe);
-	    default:
-	      return state;
-	  }
+	    return null;
 	};
 
-	var _immutable = __webpack_require__(238);
+	module.exports = exports['default'];
+	//# sourceMappingURL=validateNextState.js.map
 
-	var SET_RECIPE = 'SET_RECIPE';
-
-	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "recipe-reducer.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 240 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31274,11 +31450,11 @@
 
 	var _reactRedux = __webpack_require__(226);
 
-	var _ingredientListComponent = __webpack_require__(241);
+	var _ingredientListComponent = __webpack_require__(245);
 
 	var _ingredientListComponent2 = _interopRequireDefault(_ingredientListComponent);
 
-	var _instructionListComponent = __webpack_require__(242);
+	var _instructionListComponent = __webpack_require__(246);
 
 	var _instructionListComponent2 = _interopRequireDefault(_instructionListComponent);
 
@@ -31308,7 +31484,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "recipe-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 241 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31345,7 +31521,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "ingredient-list-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 242 */
+/* 246 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31380,7 +31556,7 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "instruction-list-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 243 */
+/* 247 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
@@ -31420,216 +31596,73 @@
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "focus-component.jsx" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
-/* 244 */
+/* 248 */
 /***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 
 	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.combineReducers = undefined;
-
-	var _combineReducers = __webpack_require__(245);
-
-	var _combineReducers2 = _interopRequireDefault(_combineReducers);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.combineReducers = _combineReducers2.default;
-	//# sourceMappingURL=index.js.map
-
-
-/***/ },
-/* 245 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _utilities = __webpack_require__(246);
-
-	var _immutable = __webpack_require__(238);
-
-	var _immutable2 = _interopRequireDefault(_immutable);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/* eslint-disable lodash3/prefer-lodash-method */
-
-	exports.default = function (reducers) {
-	    var reducerKeys = undefined;
-
-	    reducerKeys = Object.keys(reducers);
-
-	    return function (inputState, action) {
-	        if (inputState === undefined) {
-	            inputState = _immutable2.default.Map();
-	        }
-
-	        /* eslint-disable no-process-env */
-	        if (process.env.NODE_ENV !== 'production') {
-	            /* eslint-enable no-process-env */
-	            var warningMessage = undefined;
-
-	            warningMessage = (0, _utilities.getUnexpectedInvocationParameterMessage)(inputState, reducers, action);
-
-	            if (warningMessage) {
-	                /* eslint-disable no-console */
-	                console.error(warningMessage);
-	                /* eslint-enable no-console */
-	            }
-	        }
-
-	        return inputState.withMutations(function (temporaryState) {
-	            reducerKeys.forEach(function (reducerName) {
-	                var currentDomainState = undefined,
-	                    nextDomainState = undefined,
-	                    reducer = undefined;
-
-	                reducer = reducers[reducerName];
-
-	                currentDomainState = temporaryState.get(reducerName);
-
-	                nextDomainState = reducer(currentDomainState, action);
-
-	                (0, _utilities.validateNextState)(nextDomainState, reducerName, action);
-
-	                temporaryState.set(reducerName, nextDomainState);
-	            });
-	        });
-	    };
-	};
-
-	module.exports = exports['default'];
-	//# sourceMappingURL=combineReducers.js.map
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
-
-/***/ },
-/* 246 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	'create index';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.validateNextState = exports.getUnexpectedInvocationParameterMessage = exports.getStateName = undefined;
 
-	var _getStateName2 = __webpack_require__(247);
+	var _immutable = __webpack_require__(242);
 
-	var _getStateName3 = _interopRequireDefault(_getStateName2);
+	var _recipeReducer = __webpack_require__(249);
 
-	var _getUnexpectedInvocationParameterMessage2 = __webpack_require__(248);
+	var _recipeReducer2 = _interopRequireDefault(_recipeReducer);
 
-	var _getUnexpectedInvocationParameterMessage3 = _interopRequireDefault(_getUnexpectedInvocationParameterMessage2);
+	var _focusReducer = __webpack_require__(250);
 
-	var _validateNextState2 = __webpack_require__(249);
-
-	var _validateNextState3 = _interopRequireDefault(_validateNextState2);
+	var _focusReducer2 = _interopRequireDefault(_focusReducer);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	exports.getStateName = _getStateName3.default;
-	exports.getUnexpectedInvocationParameterMessage = _getUnexpectedInvocationParameterMessage3.default;
-	exports.validateNextState = _validateNextState3.default;
-	//# sourceMappingURL=index.js.map
+	var initialState = (0, _immutable.Map)({ focus: [] });
 
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	  var action = arguments[1];
 
-/***/ },
-/* 247 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	exports.default = function (action) {
-	    return action && action.type === '@@redux/INIT' ? 'initialState argument passed to createStore' : 'previous state received by the reducer';
+	  console.log('reduce', state.toJS());
+	  return initialState.merge((0, _immutable.Map)({
+	    recipe: (0, _recipeReducer2.default)(state.get('recipe'), action),
+	    focus: (0, _focusReducer2.default)(state.get('focus'), action, state)
+	  }));
 	};
 
-	module.exports = exports['default'];
-	//# sourceMappingURL=getStateName.js.map
-
-
-/***/ },
-/* 248 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _immutable = __webpack_require__(238);
-
-	var _immutable2 = _interopRequireDefault(_immutable);
-
-	var _getStateName = __webpack_require__(247);
-
-	var _getStateName2 = _interopRequireDefault(_getStateName);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	/* eslint-disable lodash3/prefer-lodash-method */
-
-	exports.default = function (state, reducers, action) {
-	    var reducerNames = Object.keys(reducers);
-
-	    if (!reducerNames.length) {
-	        return 'Store does not have a valid reducer. Make sure the argument passed to combineReducers is an object whose values are reducers.';
-	    }
-
-	    var stateName = (0, _getStateName2.default)(action);
-
-	    if (!_immutable2.default.Iterable.isIterable(state)) {
-	        return 'The ' + stateName + ' is of unexpected type. Expected argument to be an instance of Immutable.Iterable with the following properties: "' + reducerNames.join('", "') + '".';
-	    }
-
-	    var unexpectedStatePropertyNames = state.keySeq().toArray().filter(function (name) {
-	        return !reducers.hasOwnProperty(name);
-	    });
-
-	    if (unexpectedStatePropertyNames.length > 0) {
-	        return 'Unexpected ' + (unexpectedStatePropertyNames.length === 1 ? 'property' : 'properties') + ' "' + unexpectedStatePropertyNames.join('", "') + '" found in ' + stateName + '. Expected to find one of the known reducer property names instead: "' + reducerNames.join('", "') + '". Unexpected properties will be ignored.';
-	    }
-
-	    return null;
-	};
-
-	module.exports = exports['default'];
-	//# sourceMappingURL=getUnexpectedInvocationParameterMessage.js.map
-
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "reducer.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 /* 249 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
-	exports.default = function (nextState, reducerName, action) {
-	    if (typeof nextState === 'undefined') {
-	        throw new Error('Reducer "' + reducerName + '" returned undefined when handling "' + action.type + '" action. To ignore an action, you must explicitly return the previous state.');
-	    }
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? (0, _immutable.Map)() : arguments[0];
+	  var action = arguments[1];
 
-	    return null;
+	  switch (action.type) {
+	    case SET_RECIPE:
+	      return state.merge(action.recipe);
+	    default:
+	      return state;
+	  }
 	};
 
-	module.exports = exports['default'];
-	//# sourceMappingURL=validateNextState.js.map
+	var _immutable = __webpack_require__(242);
 
+	var SET_RECIPE = 'SET_RECIPE';
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "recipe-reducer.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ },
 /* 250 */
@@ -31643,21 +31676,46 @@
 	  value: true
 	});
 
-	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? (0, _immutable.List)() : arguments[0];
-	  var action = arguments[1];
+	var _reducer;
 
-	  switch (action.type) {
-	    case _focusActions.SET_FOCUS:
-	      return (0, _immutable.fromJS)(action.focus);
-	    default:
-	      return state;
-	  }
-	};
-
-	var _immutable = __webpack_require__(238);
+	var _immutable = __webpack_require__(242);
 
 	var _focusActions = __webpack_require__(251);
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	exports.default = reducer((_reducer = {}, _defineProperty(_reducer, _focusActions.SET_FOCUS, function (_, action) {
+	  return (0, _immutable.fromJS)(action.focus);
+	}), _defineProperty(_reducer, _focusActions.INCREMENT_FOCUS, function (focus, _, fullState) {
+	  return addToFocusIfPossible(focus, 1, fullState);
+	}), _defineProperty(_reducer, _focusActions.DECREMENT_FOCUS, function (focus, _, fullState) {
+	  return addToFocusIfPossible(focus, -1, fullState);
+	}), _reducer));
+
+
+	function reducer(actionTypeMap) {
+	  return function (state, action, fullState) {
+	    var handler = actionTypeMap[action.type];
+	    return handler ? handler.call(null, state, action, fullState) : state;
+	  };
+	}
+
+	function addToFocusIfPossible(focus, toAdd, fullState) {
+	  var focusingOn = focus.last();
+	  if (typeof focusingOn !== 'number') return focus;
+	  var focusList = fullState.getIn(focus.pop().toJS());
+	  var nextFocus = addToLast(focus, toAdd);
+	  return canChangeFocusTo(nextFocus, focusList) ? nextFocus : focus;
+	}
+
+	function addToLast(list, toAdd) {
+	  return list.set(-1, list.last() + toAdd);
+	}
+
+	function canChangeFocusTo(nextFocus, focusList) {
+	  var nextFocusOn = nextFocus.last();
+	  return nextFocusOn >= 0 && nextFocusOn < focusList.size;
+	}
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "focus-reducer.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
@@ -31673,9 +31731,17 @@
 	  value: true
 	});
 	var SET_FOCUS = exports.SET_FOCUS = 'SET_FOCUS';
+	var INCREMENT_FOCUS = exports.INCREMENT_FOCUS = 'INCREMENT_FOCUS';
+	var DECREMENT_FOCUS = exports.DECREMENT_FOCUS = 'DECREMENT_FOCUS';
 
 	var setFocus = exports.setFocus = function setFocus(keyPath) {
 	  return { type: SET_FOCUS, focus: keyPath };
+	};
+	var incrementFocus = exports.incrementFocus = function incrementFocus() {
+	  return { type: INCREMENT_FOCUS };
+	};
+	var decrementFocus = exports.decrementFocus = function decrementFocus() {
+	  return { type: DECREMENT_FOCUS };
 	};
 
 	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "focus-actions.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }

@@ -15,7 +15,7 @@ describe('recipeReducer', () => {
     };
     const action = setRecipe(recipe);
 
-    it('with an undefined inital state returns the new state with an immutable recipe', () => {
+    it('with an undefined initial state returns the new state with an immutable recipe', () => {
       const nextState = recipeReducer(undefined, action);
       expect(nextState).to.equal(fromJS(recipe));
     });

@@ -8,10 +8,8 @@ import { Map } from 'immutable';
 
 import Recipe from './recipes/recipe-component';
 import Focus from './focus/focus-component';
-import recipe from './recipes/recipe-reducer';
-import focus from './focus/focus-reducer';
+import reducer from './reducer';
 
-const reducer = combineReducers({ recipe, focus });
 const store = createStore(reducer, Map());
 
 store.dispatch({
