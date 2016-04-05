@@ -31499,6 +31499,8 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRouter = __webpack_require__(159);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = function (_ref) {
@@ -31510,9 +31512,12 @@
 	      return _react2.default.createElement(
 	        'li',
 	        { key: ingredient },
-	        ' ',
-	        ingredient,
-	        ' '
+	        _react2.default.createElement(
+	          _reactRouter.Link,
+	          { to: 'focus' },
+	          ' Focus '
+	        ),
+	        ingredient
 	      );
 	    })
 	  );
@@ -31574,19 +31579,32 @@
 
 	var _reactRedux = __webpack_require__(226);
 
+	var _reactRouter = __webpack_require__(159);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var Focus = exports.Focus = function Focus(_ref) {
 	  var text = _ref.text;
 	  return _react2.default.createElement(
-	    'p',
+	    'div',
 	    null,
-	    text
+	    _react2.default.createElement(
+	      _reactRouter.Link,
+	      { to: '/' },
+	      'Back'
+	    ),
+	    _react2.default.createElement(
+	      'p',
+	      null,
+	      text
+	    )
 	  );
 	};
 
 	var mapStateToProps = function mapStateToProps(state) {
-	  var focusItem = state.getIn(state.get('focus').toJS());
+	  var focusPath = state.get('focus');
+	  if (!focusPath) return { text: null };
+	  var focusItem = state.getIn(focusPath.toJS());
 	  var text = typeof focusItem === 'string' ? focusItem : null;
 	  return { text: text };
 	};
@@ -31625,7 +31643,6 @@
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
 	  var action = arguments[1];
 
-	  console.log('reduce', state.toJS());
 	  return initialState.merge((0, _immutable.Map)({
 	    recipe: (0, _recipeReducer2.default)(state.get('recipe'), action),
 	    focus: (0, _focusReducer2.default)(state.get('focus'), action, state)
