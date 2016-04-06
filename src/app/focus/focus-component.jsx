@@ -3,10 +3,10 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
-import { incrementFocus, decrementFocus } from './focus-actions'
+import { incrementFocus, decrementFocus } from './focus-actions';
 
 export const Focus = ({ text, incrementFocus, decrementFocus }) => (
-  <div>
+  <div className={'focus'}>
     <Link to='/'>Back</Link>
     <button onClick={decrementFocus}>Previous</button>
     <button onClick={incrementFocus}>Next</button>
