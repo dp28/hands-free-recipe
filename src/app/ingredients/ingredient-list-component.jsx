@@ -1,15 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-import FocusButton from '../focus-button/focus-button-component'
+import FocusButton from '../focus-button/focus-button-component';
+
+const ingredientsLocation = ['recipe', 'ingredients'];
 
 export const IngredientList = ({ ingredients }) => (
   <ul>
   {
     ingredients.map((ingredient, index) =>
-      <li key={ingredient}>
-        <FocusButton focusOn={['recipe', 'ingredients', index]} />
+      <li key={index}>
+        <FocusButton focusOn={[...ingredientsLocation, index]} />
         {ingredient}
       </li>
     )
@@ -17,6 +18,6 @@ export const IngredientList = ({ ingredients }) => (
   </ul>
 );
 
-const mapStateToProps = (state) => ({ recipe: state.get('recipe') })
+const mapStateToProps = (state) => ({ ingredients: state.getIn(ingredientsLocation) });
 
 export default connect(mapStateToProps)(IngredientList);

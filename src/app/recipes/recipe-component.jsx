@@ -8,8 +8,8 @@ import InstructionList from '../instructions/instruction-list-component';
 export const Recipe = ({ recipe }) => (
   <div>
     <h1>{recipe.get('title')}</h1>
-    <IngredientList ingredients={recipe.get('ingredients')} />
-    <InstructionList instructions={recipe.get('instructions')} />
+    <IngredientList />
+    <InstructionList />
   </div>
 );
 
