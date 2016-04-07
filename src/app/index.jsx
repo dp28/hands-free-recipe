@@ -9,17 +9,12 @@ import { Map } from 'immutable';
 import Recipe from './recipes/recipe-component';
 import Focus from './focus/focus-component';
 import reducer from './reducer';
+import recipe from './example-recipe';
+import { setRecipe } from './recipes/recipe-actions'
 
 const store = createStore(reducer, Map());
 
-store.dispatch({
-  type: 'SET_RECIPE',
-  recipe: {
-    title: 'Hog roast',
-    ingredients: ['1 apple', '1 pig'],
-    instructions: ['Put apple in pig\'s mouth', 'Roast pig']
-  }
-});
+store.dispatch(setRecipe(recipe));
 
 const PassDownChildren = ({ children }) => children;
 

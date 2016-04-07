@@ -91,18 +91,17 @@
 
 	var _reducer2 = _interopRequireDefault(_reducer);
 
+	var _exampleRecipe = __webpack_require__(255);
+
+	var _exampleRecipe2 = _interopRequireDefault(_exampleRecipe);
+
+	var _recipeActions = __webpack_require__(256);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var store = (0, _redux.createStore)(_reducer2.default, (0, _immutable.Map)());
 
-	store.dispatch({
-	  type: 'SET_RECIPE',
-	  recipe: {
-	    title: 'Hog roast',
-	    ingredients: ['1 apple', '1 pig'],
-	    instructions: ['Put apple in pig\'s mouth', 'Roast pig']
-	  }
-	});
+	store.dispatch((0, _recipeActions.setRecipe)(_exampleRecipe2.default));
 
 	var PassDownChildren = function PassDownChildren(_ref) {
 	  var children = _ref.children;
@@ -31874,6 +31873,44 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 255 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  title: 'Brilliant banana loaf',
+	  ingredients: ['140g butter, softened, plus extra for the tin', '140g caster sugar', '2 large egg, beaten', '140g self-raising flour', '1 tsp baking powder', '2 very ripe banana, mashed', '50g icing sugar', 'handful dried banana chips, for decoration'],
+	  instructions: ['Heat oven to 180C/160C fan/gas 4. Butter a 2lb loaf tin and line the base and sides with ' + 'baking parchment.', 'Cream the butter and sugar until light and fluffy, then slowly add the eggs with a little ' + 'flour. Fold in the remaining flour, baking powder and bananas. Pour into the tin and bake ' + 'for about 30 mins until a skewer comes out clean. Cool in the tin for 10 mins, then remove' + ' to a wire rack.', 'Mix the icing sugar with 2-3 tsp water to make a runny icing. Drizzle the icing across the ' + 'top of the cake and decorate with banana chips.']
+	};
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "example-recipe.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
+
+/***/ },
+/* 256 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* REACT HOT LOADER */ if (false) { (function () { var ReactHotAPI = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/node_modules/react-hot-api/modules/index.js"), RootInstanceProvider = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/RootInstanceProvider.js"), ReactMount = require("react/lib/ReactMount"), React = require("react"); module.makeHot = module.hot.data ? module.hot.data.makeHot : ReactHotAPI(function () { return RootInstanceProvider.getRootInstances(ReactMount); }, React); })(); } try { (function () {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var SET_RECIPE = exports.SET_RECIPE = 'SET_RECIPE';
+
+	var setRecipe = exports.setRecipe = function setRecipe(recipe) {
+	  return { type: SET_RECIPE, recipe: recipe };
+	};
+
+	/* REACT HOT LOADER */ }).call(this); } finally { if (false) { (function () { var foundReactClasses = module.hot.data && module.hot.data.foundReactClasses || false; if (module.exports && module.makeHot) { var makeExportsHot = require("/home/jimmy/Programming/javascript/hands-free-recipe/node_modules/react-hot-loader/makeExportsHot.js"); if (makeExportsHot(module, require("react"))) { foundReactClasses = true; } var shouldAcceptModule = true && foundReactClasses; if (shouldAcceptModule) { module.hot.accept(function (err) { if (err) { console.error("Cannot not apply hot update to " + "recipe-actions.js" + ": " + err.message); } }); } } module.hot.dispose(function (data) { data.makeHot = module.makeHot; data.foundReactClasses = foundReactClasses; }); })(); } }
 
 /***/ }
 /******/ ]);
