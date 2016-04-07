@@ -31724,10 +31724,24 @@
 	    ),
 	    _react2.default.createElement(
 	      'p',
-	      null,
+	      { style: { fontSize: fontSize(text) } },
 	      text
 	    )
 	  );
+	};
+
+	var fontSize = function fontSize(text) {
+	  var screenArea = document.body.offsetWidth * document.body.offsetHeight;
+	  var characterArea = screenArea / text.length;
+	  return Math.sqrt(characterArea) * correctionFactor(text.length);
+	};
+
+	var correctionFactor = function correctionFactor(size) {
+	  return 1 + positiveLog(positiveLog(positiveLog(size))) / 3;
+	};
+
+	var positiveLog = function positiveLog(n) {
+	  return Math.max(0, Math.log(n));
 	};
 
 	var mapStateToProps = function mapStateToProps(state) {

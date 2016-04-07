@@ -10,9 +10,21 @@ export const Focus = ({ text, incrementFocus, decrementFocus }) => (
     <Link to='/'>Back</Link>
     <button onClick={decrementFocus}>Previous</button>
     <button onClick={incrementFocus}>Next</button>
-    <p>{text}</p>
+    <p style={{ fontSize: fontSize(text) }}>{text}</p>
   </div>
 );
+
+const fontSize = (text) => {
+  const screenArea = document.body.offsetWidth * document.body.offsetHeight;
+  const characterArea = screenArea / text.length;
+  return Math.sqrt(characterArea) * correctionFactor(text.length);
+}
+
+const correctionFactor = (size) => (
+  1 + (positiveLog(positiveLog(positiveLog(size))) / 3)
+);
+
+const positiveLog = (n) => Math.max(0, Math.log(n));
 
 const mapStateToProps = (state) => {
   const focusPath = state.get('focus');
